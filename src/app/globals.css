@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════
+   فونت IRANYekanXFaNum
+   ═══════════════════════════════════════ */
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Regular") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-DemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════
+   متغیرهای پنل ادمین (shadcn)
+   ═══════════════════════════════════════ */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 4%;
+    --primary: 173 80% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 6% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 173 80% 40%;
+    --radius: 0.75rem;
+
+    /* ═══ متغیرهای سایت لندینگ (داینامیک از Theme) ═══ */
+    --site-primary: #14B8A6;
+    --site-secondary: #FB923C;
+    --site-accent: #06B6D4;
+    --site-text: #18181B;
+    --site-text-muted: #71717A;
+    --site-bg: #FFFFFF;
+    --site-bg-muted: #F8FAFC;
+    --site-border: #E4E4E7;
+    --site-radius: 16px;
+    --site-font: "IRANYekanX";
+  }
+
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 173 80% 40%;
+    --primary-foreground: 240 6% 10%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 173 80% 40%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    direction: rtl;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* ═══════════════════════════════════════
+   استایل‌های پایه سایت‌های لندینگ
+   ═══════════════════════════════════════ */
+.site-scope {
+  font-family: var(--site-font), sans-serif;
+  background-color: var(--site-bg);
+  color: var(--site-text);
+}
+
+.site-scope .btn-primary {
+  background-color: var(--site-primary);
+  color: var(--site-text);
+}
+
+.site-scope .btn-secondary {
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  border: 2px solid var(--site-text);
+}
+
+.site-scope .btn-accent {
+  background-color: var(--site-secondary);
+  color: var(--site-text);
+}
+
+.site-scope .btn-evano {
+  border-radius: 16px;
+  box-shadow: 0 2px 0 0 rgba(26, 26, 26, 1);
+  outline: 2px solid rgb(24, 24, 27);
+  outline-offset: -2px;
+}
+
+.site-scope .btn-evano:hover {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 0 rgba(26, 26, 26, 1);
+}
+
+/* ═══════════════════════════════════════
+   اسکرول‌بار سفارشی
+   ═══════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* ═══════════════════════════════════════
+   انیمیشن‌ها
+   ═══════════════════════════════════════ */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* اعداد فارسی */
+.fa-num {
+  font-feature-settings: "ss02";
+  font-variant-numeric: normal;
+}
+
+[dir="rtl"] .ltr {
+  direction: ltr;
+  display: inline-block;
+}
