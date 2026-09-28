@@ -1,6 +1,7 @@
 import { getBlock } from "./registry";
 import HeaderRenderer from "./header/renderer";
 import HeroRenderer from "./hero/renderer";
+import FooterRenderer from "./footer/renderer";
 
 interface BlockRendererProps {
   blockType: string;
@@ -18,10 +19,16 @@ const blockComponents: Record<
 > = {
   header: HeaderRenderer,
   hero: HeroRenderer,
+  footer: FooterRenderer,
   // بلاک‌های بعدی:
   // intro: IntroRenderer,
   // timeline: TimelineRenderer,
-  // ...
+  // about: AboutRenderer,
+  // features: FeaturesRenderer,
+  // merchants: MerchantsRenderer,
+  // faq: FaqRenderer,
+  // cta: CtaRenderer,
+  // contact_form: ContactFormRenderer,
 };
 
 export function BlockRenderer({
@@ -41,7 +48,6 @@ export function BlockRenderer({
 
   const Component = blockComponents[blockType];
 
-  // اگه کامپوننت واقعی رو ساختیم
   if (Component) {
     return <Component variant={variant} content={content} />;
   }

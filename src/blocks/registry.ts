@@ -536,21 +536,31 @@ export const BLOCKS: Record<string, BlockDefinition> = {
   },
 
   // ──────── Footer ────────
-  footer: {
+    footer: {
     code: "footer",
     label: "فوتر",
     icon: "layout-bottom",
     category: "layout",
-    description: "پایین صفحه با لینک‌ها و اطلاعات",
+    description: "پایین صفحه با اطلاعات تماس و شبکه‌های اجتماعی",
     variants: [
-      { code: "v1", label: "کامل ۳ ستونه" },
-      { code: "v2", label: "مینیمال" },
+      { code: "v1", label: "کامل ۳ ستونه", description: "با همه اطلاعات" },
+      { code: "v2", label: "مینیمال", description: "سبک و ساده" },
     ],
     defaultVariant: "v1",
     fields: [
       { key: "logo", type: "image", label: "لوگو" },
-      { key: "about_text", type: "textarea", label: "متن درباره ما" },
-      { key: "copyright", type: "text", label: "کپی‌رایت" },
+      {
+        key: "about_text",
+        type: "textarea",
+        label: "متن درباره ما",
+        placeholder: "توضیح کوتاه درباره سایت...",
+      },
+      {
+        key: "copyright",
+        type: "text",
+        label: "متن کپی‌رایت",
+        placeholder: "تمامی حقوق محفوظ است.",
+      },
       {
         key: "socials",
         type: "repeater",
@@ -570,19 +580,24 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         max: 5,
         fields: [
           { key: "icon", type: "icon", label: "آیکن" },
-          { key: "label", type: "text", label: "برچسب" },
-          { key: "value", type: "text", label: "مقدار" },
+          { key: "label", type: "text", label: "برچسب (مثلاً: موبایل)" },
+          { key: "value", type: "text", label: "مقدار (مثلاً: ۰۹۱۲...)" },
         ],
       },
     ],
     defaultContent: {
       logo: "",
-      about_text: "اپلیکیشن جامع اوانو...",
+      about_text:
+        "اپلیکیشن جامع «اوانو» انواع خدمات مالی، اپراتوری، سفر و گردشگری، خرید بیمه و امور خیریه را به کاربران ارائه می‌دهد.",
       copyright: "تمامی حقوق برای اپلیکیشن اوانو محفوظ است.",
-      socials: [],
+      socials: [
+        { icon: "Instagram", link: "https://instagram.com/" },
+        { icon: "Twitter", link: "https://twitter.com/" },
+        { icon: "Youtube", link: "https://youtube.com/" },
+      ],
       contacts: [
-        { icon: "phone", label: "شماره موبایل", value: "091299976" },
-        { icon: "mail", label: "ایمیل", value: "support@ewano.app" },
+        { icon: "Phone", label: "شماره موبایل", value: "091299976" },
+        { icon: "Mail", label: "ایمیل", value: "support@ewano.app" },
       ],
     },
   },
