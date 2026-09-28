@@ -73,7 +73,7 @@ export function FieldRenderer({
     );
   }
 
-  // ═══════ richtext (فعلاً مثل textarea) ═══════
+  // ═══════ richtext ═══════
   if (field.type === "richtext") {
     return (
       <div className="space-y-2">
@@ -156,7 +156,7 @@ export function FieldRenderer({
   // ═══════ toggle ═══════
   if (field.type === "toggle") {
     return (
-      <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
+      <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
         <Label className="cursor-pointer">{field.label}</Label>
         <Switch checked={!!value} onCheckedChange={onChange} />
       </div>
@@ -184,11 +184,11 @@ export function FieldRenderer({
     );
   }
 
-  // ═══════ group (گروه فیلدها) ═══════
+  // ═══════ group ═══════
   if (field.type === "group") {
     const groupValue = value || {};
     return (
-      <div className="space-y-3 p-4 border rounded-xl bg-secondary/20">
+      <div className="space-y-3 p-4 border rounded-xl bg-secondary/40">
         <Label className="font-semibold text-sm">{field.label}</Label>
         {field.fields?.map((subField) => (
           <FieldRenderer
@@ -203,7 +203,7 @@ export function FieldRenderer({
     );
   }
 
-  // ═══════ repeater (لیست تکرارشونده) ═══════
+  // ═══════ repeater ═══════
   if (field.type === "repeater") {
     return (
       <RepeaterField
@@ -215,6 +215,8 @@ export function FieldRenderer({
     );
   }
 
+  // ⚠️ اگه به اینجا رسید، یعنی نوع فیلد ناشناخته‌ست
+  console.error("❌ Unknown field type:", field);
   return (
     <div className="p-3 bg-destructive/10 text-destructive text-xs rounded-lg">
       نوع فیلد ناشناخته: {field.type}
@@ -222,9 +224,7 @@ export function FieldRenderer({
   );
 }
 
-// ═══════════════════════════════════════
-// کامپوننت Repeater (لیست تکرارشونده)
-// ═══════════════════════════════════════
+// ═══════ Repeater ═══════
 interface RepeaterFieldProps {
   field: BlockField;
   value: any[];
@@ -294,14 +294,13 @@ function RepeaterField({
           return (
             <div
               key={index}
-              className="border rounded-xl overflow-hidden bg-white"
+              className="border rounded-xl overflow-hidden bg-card"
             >
-              {/* هدر آیتم */}
-              <div className="flex items-center gap-2 p-3 bg-secondary/30">
+              <div className="flex items-center gap-2 p-3 bg-secondary">
                 <button
                   type="button"
                   onClick={() => toggleItem(index)}
-                  className="size-6 rounded flex items-center justify-center hover:bg-secondary"
+                  className="size-6 rounded flex items-center justify-center hover:bg-card"
                 >
                   {isOpen ? (
                     <ChevronUp className="size-4" />
@@ -310,7 +309,7 @@ function RepeaterField({
                   )}
                 </button>
                 <GripVertical className="size-4 text-muted-foreground" />
-                <div className="flex-1 text-sm font-medium">
+                <div className="flex-1 text-sm font-medium text-foreground">
                   {item.title || item.name || item.label || `آیتم ${index + 1}`}
                 </div>
                 <div className="flex items-center gap-1">
@@ -318,7 +317,7 @@ function RepeaterField({
                     type="button"
                     onClick={() => moveItem(index, "up")}
                     disabled={index === 0}
-                    className="size-6 rounded flex items-center justify-center hover:bg-secondary disabled:opacity-30"
+                    className="size-6 rounded flex items-center justify-center hover:bg-card disabled:opacity-30"
                   >
                     <ChevronUp className="size-3.5" />
                   </button>
@@ -326,7 +325,7 @@ function RepeaterField({
                     type="button"
                     onClick={() => moveItem(index, "down")}
                     disabled={index === value.length - 1}
-                    className="size-6 rounded flex items-center justify-center hover:bg-secondary disabled:opacity-30"
+                    className="size-6 rounded flex items-center justify-center hover:bg-card disabled:opacity-30"
                   >
                     <ChevronDown className="size-3.5" />
                   </button>
@@ -340,9 +339,8 @@ function RepeaterField({
                 </div>
               </div>
 
-              {/* محتوای آیتم */}
               {isOpen && (
-                <div className="p-3 space-y-3">
+                <div className="p-3 space-y-3 bg-card">
                   {field.fields?.map((subField) => (
                     <FieldRenderer
                       key={subField.key}

@@ -98,24 +98,48 @@ export const BLOCKS: Record<string, BlockDefinition> = {
   },
 
   // ──────── Hero ────────
-  hero: {
+    hero: {
     code: "hero",
     label: "هیرو اصلی",
     icon: "sparkles",
     category: "layout",
     description: "بخش اول سایت با تیتر و دکمه‌ها",
     variants: [
-      { code: "v1", label: "تیره + تصویر چپ" },
-      { code: "v2", label: "روشن + تصویر پایین" },
-      { code: "v3", label: "عکس تمام‌صفحه" },
+      { code: "v1", label: "تیره + تصویر چپ", description: "مناسب تم تیره" },
+      { code: "v2", label: "روشن + تصویر پایین", description: "مناسب تم روشن" },
+      { code: "v3", label: "عکس تمام‌صفحه", description: "با تصویر بزرگ پس‌زمینه" },
     ],
     defaultVariant: "v1",
     fields: [
-      { key: "title", type: "text", label: "عنوان", required: true },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی در عنوان" },
-      { key: "subtitle", type: "textarea", label: "زیرعنوان" },
-      { key: "image", type: "image", label: "تصویر" },
-      { key: "background_color", type: "color", label: "رنگ پس‌زمینه" },
+      {
+        key: "title",
+        type: "text",
+        label: "عنوان",
+        required: true,
+        placeholder: "آغاز طرح اعتبار پوشاک",
+      },
+      {
+        key: "title_highlight",
+        type: "text",
+        label: "کلمه رنگی در عنوان",
+        placeholder: "اعتبار",
+      },
+      {
+        key: "subtitle",
+        type: "textarea",
+        label: "زیرعنوان",
+        placeholder: "توضیح کوتاه درباره طرح...",
+      },
+      {
+        key: "image",
+        type: "image",
+        label: "تصویر",
+      },
+      {
+        key: "background_color",
+        type: "color",
+        label: "رنگ پس‌زمینه (فقط در طرح ۱ و ۲)",
+      },
       {
         key: "buttons",
         type: "repeater",
@@ -134,18 +158,30 @@ export const BLOCKS: Record<string, BlockDefinition> = {
               { label: "ثانویه (خالی)", value: "secondary" },
             ],
           },
+          { key: "icon", type: "icon", label: "آیکن (اختیاری)" },
         ],
       },
     ],
     defaultContent: {
       title: "آغاز طرح اعتبار پوشاک",
       title_highlight: "اعتبار",
-      subtitle: "توضیحات کوتاه درباره طرح شما",
+      subtitle:
+        "توضیح کوتاه درباره طرح شما که بازدیدکننده را ترغیب به ادامه می‌کند",
       image: "",
       background_color: "#030712",
       buttons: [
-        { text: "نسخه اندروید", link: "#", style: "secondary" },
-        { text: "نسخه وب اپلیکیشن", link: "#", style: "primary" },
+        {
+          text: "نسخه اندروید",
+          link: "#",
+          style: "secondary",
+          icon: "",
+        },
+        {
+          text: "نسخه وب اپلیکیشن",
+          link: "#",
+          style: "primary",
+          icon: "",
+        },
       ],
     },
   },

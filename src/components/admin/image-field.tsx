@@ -9,7 +9,12 @@ interface ImageFieldProps {
   siteId?: string;
 }
 
-export function ImageField({ value, onChange, label, siteId }: ImageFieldProps) {
+export function ImageField({
+  value,
+  onChange,
+  label,
+  siteId,
+}: ImageFieldProps) {
   return (
     <ImageUploader
       value={value}

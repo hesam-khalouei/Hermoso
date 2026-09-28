@@ -5,7 +5,6 @@ import * as Icons from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-// لیست آیکن‌های پرکاربرد
 const commonIcons = [
   "Star", "Heart", "Shield", "Zap", "Award", "Gift",
   "Phone", "Mail", "MapPin", "Globe", "Link", "Share2",
@@ -19,7 +18,7 @@ const commonIcons = [
   "Sun", "Moon", "Cloud", "Umbrella", "Leaf", "Flower",
   "Coffee", "Pizza", "Apple", "Carrot",
   "Instagram", "Twitter", "Facebook", "Linkedin", "Youtube", "Github",
-  "Apple", "Chrome", "Firefox", "Slack",
+  "Chrome", "Firefox", "Slack",
 ];
 
 interface IconPickerProps {
@@ -68,14 +67,16 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
       {value && (
         <div className="text-xs text-muted-foreground flex items-center gap-2 pt-2 border-t">
           انتخاب‌شده:
-          <span className="font-mono bg-secondary px-2 py-0.5 rounded">{value}</span>
+          <span className="font-mono bg-secondary px-2 py-0.5 rounded text-foreground">
+            {value}
+          </span>
         </div>
       )}
     </div>
   );
 }
 
-// ═══════ کامپوننت رندر آیکن (برای استفاده در سایت‌ها) ═══════
+// ═══════ کامپوننت رندر آیکن ═══════
 interface DynamicIconProps {
   name: string;
   className?: string;

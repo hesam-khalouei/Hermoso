@@ -1,5 +1,6 @@
 import { getBlock } from "./registry";
 import HeaderRenderer from "./header/renderer";
+import HeroRenderer from "./hero/renderer";
 
 interface BlockRendererProps {
   blockType: string;
@@ -16,8 +17,8 @@ const blockComponents: Record<
   React.ComponentType<{ variant: string; content: Record<string, any> }>
 > = {
   header: HeaderRenderer,
-  // بقیه بلاک‌ها رو یکی یکی اضافه می‌کنیم:
-  // hero: HeroRenderer,
+  hero: HeroRenderer,
+  // بلاک‌های بعدی:
   // intro: IntroRenderer,
   // timeline: TimelineRenderer,
   // ...
