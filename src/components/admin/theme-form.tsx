@@ -14,7 +14,19 @@ import Link from "next/link";
 
 const presetThemes = [
   {
-    name: "اوانو (فیروزه‌ای)",
+    name: "ایندیگو مدرن",
+    colors: {
+      primary: "#6366F1",
+      secondary: "#F59E0B",
+      accent: "#06B6D4",
+      text: "#18181B",
+      textMuted: "#71717A",
+      background: "#FFFFFF",
+      border: "#E4E4E7",
+    },
+  },
+  {
+    name: "فیروزه‌ای",
     colors: {
       primary: "#14B8A6",
       secondary: "#FB923C",
@@ -61,6 +73,18 @@ const presetThemes = [
       border: "#D1FAE5",
     },
   },
+  {
+    name: "صورتی رز",
+    colors: {
+      primary: "#EC4899",
+      secondary: "#F59E0B",
+      accent: "#8B5CF6",
+      text: "#1F2937",
+      textMuted: "#6B7280",
+      background: "#FFFFFF",
+      border: "#FCE7F3",
+    },
+  },
 ];
 
 interface ThemeFormProps {
@@ -84,14 +108,22 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
   const isEdit = !!initialData;
 
   const [name, setName] = useState(initialData?.name || "");
-  const [primary, setPrimary] = useState(initialData?.primary || "#14B8A6");
-  const [secondary, setSecondary] = useState(initialData?.secondary || "#FB923C");
+  const [primary, setPrimary] = useState(initialData?.primary || "#6366F1");
+  const [secondary, setSecondary] = useState(
+    initialData?.secondary || "#F59E0B"
+  );
   const [accent, setAccent] = useState(initialData?.accent || "#06B6D4");
   const [text, setText] = useState(initialData?.text || "#18181B");
-  const [textMuted, setTextMuted] = useState(initialData?.textMuted || "#71717A");
-  const [background, setBackground] = useState(initialData?.background || "#FFFFFF");
+  const [textMuted, setTextMuted] = useState(
+    initialData?.textMuted || "#71717A"
+  );
+  const [background, setBackground] = useState(
+    initialData?.background || "#FFFFFF"
+  );
   const [border, setBorder] = useState(initialData?.border || "#E4E4E7");
-  const [fontFamily, setFontFamily] = useState(initialData?.fontFamily || "IRANYekanX");
+  const [fontFamily, setFontFamily] = useState(
+    initialData?.fontFamily || "IRANYekanX"
+  );
   const [radius, setRadius] = useState(initialData?.radius || "16px");
   const [saving, setSaving] = useState(false);
 
@@ -149,7 +181,6 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-6xl">
-      {/* برو برگرد */}
       <Link
         href="/themes"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -162,7 +193,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
         {/* ستون چپ: فرم */}
         <div className="space-y-6">
           {/* نام تم */}
-          <div className="bg-white rounded-2xl border p-6 space-y-4">
+          <div className="bg-card rounded-2xl border p-6 space-y-4">
             <h3 className="font-semibold">اطلاعات پایه</h3>
             <div className="space-y-2">
               <Label htmlFor="name">نام تم *</Label>
@@ -177,7 +208,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
           </div>
 
           {/* تم‌های آماده */}
-          <div className="bg-white rounded-2xl border p-6 space-y-4">
+          <div className="bg-card rounded-2xl border p-6 space-y-4">
             <div>
               <h3 className="font-semibold mb-1">تم‌های آماده</h3>
               <p className="text-xs text-muted-foreground">
@@ -190,7 +221,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
                   key={preset.name}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className="p-3 rounded-xl border hover:border-primary transition text-right"
+                  className="p-3 rounded-xl border hover:border-primary transition text-right bg-card"
                 >
                   <div className="flex gap-1 mb-2">
                     <div
@@ -213,7 +244,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
           </div>
 
           {/* رنگ‌ها */}
-          <div className="bg-white rounded-2xl border p-6 space-y-4">
+          <div className="bg-card rounded-2xl border p-6 space-y-4">
             <h3 className="font-semibold">رنگ‌ها</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <ColorPicker
@@ -255,13 +286,13 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
           </div>
 
           {/* فونت */}
-          <div className="bg-white rounded-2xl border p-6 space-y-4">
+          <div className="bg-card rounded-2xl border p-6 space-y-4">
             <h3 className="font-semibold">فونت</h3>
             <FontPicker value={fontFamily} onChange={setFontFamily} />
           </div>
 
           {/* شکل */}
-          <div className="bg-white rounded-2xl border p-6 space-y-4">
+          <div className="bg-card rounded-2xl border p-6 space-y-4">
             <h3 className="font-semibold">شعاع گوشه‌ها</h3>
             <div className="flex gap-2 flex-wrap">
               {["0px", "4px", "8px", "12px", "16px", "24px", "999px"].map(
@@ -286,7 +317,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
 
         {/* ستون راست: پیش‌نمایش */}
         <div className="lg:sticky lg:top-24 self-start space-y-4">
-          <div className="bg-white rounded-2xl border p-6">
+          <div className="bg-card rounded-2xl border p-6">
             <h3 className="font-semibold mb-4">پیش‌نمایش زنده</h3>
             <ThemePreview
               colors={{

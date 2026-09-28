@@ -27,7 +27,6 @@ export default async function ThemesPage() {
       <Header user={user!} title="تم‌ها" />
 
       <div className="p-6 space-y-6">
-        {/* هدر صفحه */}
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold mb-1">مدیریت تم‌ها</h2>
@@ -43,7 +42,6 @@ export default async function ThemesPage() {
           </Link>
         </div>
 
-        {/* لیست تم‌ها */}
         <ThemesList themes={themes} />
       </div>
     </>

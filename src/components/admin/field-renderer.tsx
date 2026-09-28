@@ -16,16 +16,28 @@ import { ImageField } from "./image-field";
 import { IconPicker } from "./icon-picker";
 import { ColorPicker } from "./color-picker";
 import type { BlockField } from "@/blocks/registry";
-import { Plus, Trash2, GripVertical, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  GripVertical,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { useState } from "react";
 
 interface FieldRendererProps {
   field: BlockField;
   value: any;
   onChange: (value: any) => void;
+  siteId?: string;
 }
 
-export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
+export function FieldRenderer({
+  field,
+  value,
+  onChange,
+  siteId,
+}: FieldRendererProps) {
   // ═══════ text ═══════
   if (field.type === "text") {
     return (
@@ -115,7 +127,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
     return (
       <div className="space-y-2">
         <Label>{field.label}</Label>
-        <ImageField value={value || ""} onChange={onChange} />
+        <ImageField value={value || ""} onChange={onChange} siteId={siteId} />
       </div>
     );
   }
@@ -183,9 +195,8 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
             key={subField.key}
             field={subField}
             value={groupValue[subField.key]}
-            onChange={(val) =>
-              onChange({ ...groupValue, [subField.key]: val })
-            }
+            onChange={(val) => onChange({ ...groupValue, [subField.key]: val })}
+            siteId={siteId}
           />
         ))}
       </div>
@@ -195,7 +206,12 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
   // ═══════ repeater (لیست تکرارشونده) ═══════
   if (field.type === "repeater") {
     return (
-      <RepeaterField field={field} value={value || []} onChange={onChange} />
+      <RepeaterField
+        field={field}
+        value={value || []}
+        onChange={onChange}
+        siteId={siteId}
+      />
     );
   }
 
@@ -213,9 +229,15 @@ interface RepeaterFieldProps {
   field: BlockField;
   value: any[];
   onChange: (value: any[]) => void;
+  siteId?: string;
 }
 
-function RepeaterField({ field, value, onChange }: RepeaterFieldProps) {
+function RepeaterField({
+  field,
+  value,
+  onChange,
+  siteId,
+}: RepeaterFieldProps) {
   const [openItems, setOpenItems] = useState<number[]>([0]);
 
   function toggleItem(index: number) {
@@ -227,7 +249,8 @@ function RepeaterField({ field, value, onChange }: RepeaterFieldProps) {
   function addItem() {
     const newItem: Record<string, any> = {};
     field.fields?.forEach((f) => {
-      newItem[f.key] = f.type === "toggle" ? false : f.type === "number" ? 0 : "";
+      newItem[f.key] =
+        f.type === "toggle" ? false : f.type === "number" ? 0 : "";
     });
     onChange([...value, newItem]);
     setOpenItems((prev) => [...prev, value.length]);
@@ -247,7 +270,10 @@ function RepeaterField({ field, value, onChange }: RepeaterFieldProps) {
     const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex < 0 || newIndex >= value.length) return;
     const newValue = [...value];
-    [newValue[index], newValue[newIndex]] = [newValue[newIndex], newValue[index]];
+    [newValue[index], newValue[newIndex]] = [
+      newValue[newIndex],
+      newValue[index],
+    ];
     onChange(newValue);
   }
 
@@ -323,6 +349,7 @@ function RepeaterField({ field, value, onChange }: RepeaterFieldProps) {
                       field={subField}
                       value={item[subField.key]}
                       onChange={(val) => updateItem(index, subField.key, val)}
+                      siteId={siteId}
                     />
                   ))}
                 </div>

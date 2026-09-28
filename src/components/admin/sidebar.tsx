@@ -64,16 +64,16 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-64 h-screen bg-white border-l flex flex-col sticky top-0">
+    <aside className="w-64 h-screen bg-card border-l flex flex-col sticky top-0">
       {/* لوگو */}
       <div className="p-6 border-b">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md">
+          <div className="size-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20">
             <span className="text-xl font-bold">ه</span>
           </div>
           <div>
-            <div className="font-bold text-lg leading-tight">هرموسو</div>
-            <div className="text-xs text-muted-foreground">
+            <div className="font-bold text-base leading-tight">هرموسو</div>
+            <div className="text-[11px] text-muted-foreground">
               پنل مدیریت محتوا
             </div>
           </div>
@@ -81,8 +81,8 @@ export function Sidebar() {
       </div>
 
       {/* منوی اصلی */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        <div className="text-xs font-semibold text-muted-foreground px-3 py-2">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        <div className="text-[11px] font-semibold text-muted-foreground px-3 py-2 uppercase tracking-wider">
           مدیریت محتوا
         </div>
         {menuItems.map((item) => {
@@ -95,22 +95,19 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                 isActive
-                  ? "bg-primary/10 text-primary"
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               )}
             >
-              <Icon className="size-5 shrink-0" />
+              <Icon className="size-[18px] shrink-0" />
               <span>{item.title}</span>
-              {isActive && (
-                <div className="mr-auto w-1.5 h-1.5 rounded-full bg-primary" />
-              )}
             </Link>
           );
         })}
 
-        <div className="text-xs font-semibold text-muted-foreground px-3 py-2 pt-6">
+        <div className="text-[11px] font-semibold text-muted-foreground px-3 py-2 pt-6 uppercase tracking-wider">
           سیستم
         </div>
         {bottomItems.map((item) => {
@@ -123,13 +120,13 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                 isActive
-                  ? "bg-primary/10 text-primary"
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               )}
             >
-              <Icon className="size-5 shrink-0" />
+              <Icon className="size-[18px] shrink-0" />
               <span>{item.title}</span>
             </Link>
           );
@@ -137,12 +134,12 @@ export function Sidebar() {
       </nav>
 
       {/* خروج */}
-      <div className="p-4 border-t">
+      <div className="p-3 border-t">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all"
         >
-          <LogOut className="size-5 shrink-0" />
+          <LogOut className="size-[18px] shrink-0" />
           <span>خروج از حساب</span>
         </button>
       </div>

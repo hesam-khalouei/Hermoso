@@ -48,9 +48,7 @@ export default async function SitesPage() {
           </div>
           {themesCount === 0 ? (
             <Link href="/themes/new">
-              <Button variant="outline">
-                اول یه تم بساز
-              </Button>
+              <Button variant="outline">اول یه تم بساز</Button>
             </Link>
           ) : (
             <Link href="/sites/new">

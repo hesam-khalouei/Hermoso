@@ -30,6 +30,7 @@ interface BlockSettingsDialogProps {
   onClose: () => void;
   onSave: (updatedBlock: Block) => void;
   pageId: string;
+  siteId: string;
 }
 
 export function BlockSettingsDialog({
@@ -38,6 +39,7 @@ export function BlockSettingsDialog({
   onClose,
   onSave,
   pageId,
+  siteId,
 }: BlockSettingsDialogProps) {
   const [content, setContent] = useState<Record<string, any>>({});
   const [variant, setVariant] = useState("v1");
@@ -64,7 +66,6 @@ export function BlockSettingsDialog({
     });
 
     if (res.ok) {
-      const updated = await res.json();
       toast.success("بلاک ذخیره شد");
       onSave({
         ...block!,
@@ -85,13 +86,15 @@ export function BlockSettingsDialog({
           <DialogTitle>ویرایش: {definition.label}</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="variant" className="flex-1 overflow-hidden flex flex-col">
+        <Tabs
+          defaultValue="variant"
+          className="flex-1 overflow-hidden flex flex-col"
+        >
           <TabsList className="self-start">
             <TabsTrigger value="variant">طرح نمایش</TabsTrigger>
             <TabsTrigger value="content">محتوا</TabsTrigger>
           </TabsList>
 
-          {/* ═══ تب انتخاب واریانت ═══ */}
           <TabsContent
             value="variant"
             className="flex-1 overflow-y-auto mt-4 pr-1"
@@ -103,7 +106,7 @@ export function BlockSettingsDialog({
                   type="button"
                   onClick={() => setVariant(v.code)}
                   className={cn(
-                    "relative p-4 rounded-xl border-2 text-right transition-all",
+                    "relative p-4 rounded-xl border-2 text-right transition-all bg-card",
                     variant === v.code
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-muted-foreground/50"
@@ -128,7 +131,6 @@ export function BlockSettingsDialog({
             </div>
           </TabsContent>
 
-          {/* ═══ تب محتوا ═══ */}
           <TabsContent
             value="content"
             className="flex-1 overflow-y-auto mt-4 pr-1 space-y-4"
@@ -141,6 +143,7 @@ export function BlockSettingsDialog({
                 onChange={(val) =>
                   setContent((prev) => ({ ...prev, [field.key]: val }))
                 }
+                siteId={siteId}
               />
             ))}
           </TabsContent>

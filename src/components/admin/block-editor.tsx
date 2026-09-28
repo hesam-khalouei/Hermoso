@@ -47,7 +47,6 @@ export function BlockEditor({
   const [showAddPanel, setShowAddPanel] = useState(false);
   const [editingBlock, setEditingBlock] = useState<Block | null>(null);
 
-  // ═══════ افزودن بلاک ═══════
   async function addBlock(blockCode: string) {
     const definition = BLOCK_LIST.find((b) => b.code === blockCode);
     if (!definition) return;
@@ -79,7 +78,6 @@ export function BlockEditor({
     }
   }
 
-  // ═══════ حذف بلاک ═══════
   async function deleteBlock(id: string) {
     if (!confirm("این بلاک حذف شود؟")) return;
 
@@ -95,7 +93,6 @@ export function BlockEditor({
     }
   }
 
-  // ═══════ جابجایی ═══════
   async function moveBlock(id: string, direction: "up" | "down") {
     const index = blocks.findIndex((b) => b.id === id);
     if (index === -1) return;
@@ -121,7 +118,6 @@ export function BlockEditor({
     });
   }
 
-  // ═══════ مخفی/نمایان ═══════
   async function toggleVisible(id: string) {
     const block = blocks.find((b) => b.id === id);
     if (!block) return;
@@ -138,7 +134,6 @@ export function BlockEditor({
     });
   }
 
-  // ═══════ ذخیره تغییرات از دیالوگ ═══════
   function handleBlockSave(updated: Block) {
     setBlocks(blocks.map((b) => (b.id === updated.id ? updated : b)));
   }
@@ -146,9 +141,9 @@ export function BlockEditor({
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6">
-        {/* ═══ ستون راست: لیست بلاک‌ها ═══ */}
+        {/* ستون راست: لیست بلاک‌ها */}
         <div className="space-y-3">
-          <div className="bg-white rounded-2xl border">
+          <div className="bg-card rounded-2xl border">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-sm">بلاک‌ها</h3>
@@ -167,13 +162,15 @@ export function BlockEditor({
                 </div>
               ) : (
                 blocks.map((block, index) => {
-                  const def = BLOCK_LIST.find((b) => b.code === block.blockType);
+                  const def = BLOCK_LIST.find(
+                    (b) => b.code === block.blockType
+                  );
                   return (
                     <div
                       key={block.id}
                       className={`p-3 rounded-xl border-2 transition ${
                         block.isVisible
-                          ? "border-border bg-white"
+                          ? "border-border bg-card"
                           : "border-dashed border-muted-foreground/30 bg-muted/30 opacity-60"
                       }`}
                     >
@@ -250,7 +247,7 @@ export function BlockEditor({
           </div>
 
           {showAddPanel && (
-            <div className="bg-white rounded-2xl border p-4 space-y-2 max-h-[500px] overflow-y-auto">
+            <div className="bg-card rounded-2xl border p-4 space-y-2 max-h-[500px] overflow-y-auto">
               <div className="text-xs font-semibold text-muted-foreground mb-2">
                 انتخاب بلاک
               </div>
@@ -273,9 +270,9 @@ export function BlockEditor({
           )}
         </div>
 
-        {/* ═══ ستون چپ: پیش‌نمایش ═══ */}
+        {/* ستون چپ: پیش‌نمایش */}
         <div className="space-y-3">
-          <div className="bg-white rounded-2xl border p-3">
+          <div className="bg-card rounded-2xl border p-3">
             <div className="flex items-center gap-2 mb-3">
               <div className="flex gap-1.5">
                 <div className="size-2.5 rounded-full bg-red-400" />
@@ -291,10 +288,10 @@ export function BlockEditor({
             </div>
 
             <div
-              className="rounded-xl overflow-hidden border"
+              className="rounded-xl overflow-hidden border bg-white"
               style={{
-                ["--site-primary" as any]: theme?.primary || "#14B8A6",
-                ["--site-secondary" as any]: theme?.secondary || "#FB923C",
+                ["--site-primary" as any]: theme?.primary || "#6366F1",
+                ["--site-secondary" as any]: theme?.secondary || "#F59E0B",
                 ["--site-accent" as any]: theme?.accent || "#06B6D4",
                 ["--site-text" as any]: theme?.text || "#18181B",
                 ["--site-text-muted" as any]: theme?.textMuted || "#71717A",
@@ -327,13 +324,13 @@ export function BlockEditor({
         </div>
       </div>
 
-      {/* ═══ دیالوگ ویرایش ═══ */}
       <BlockSettingsDialog
         block={editingBlock}
         open={!!editingBlock}
         onClose={() => setEditingBlock(null)}
         onSave={handleBlockSave}
         pageId={pageId}
+        siteId={siteId}
       />
     </>
   );

@@ -5,11 +5,11 @@ import {
   Globe,
   MessageSquare,
   Palette,
-  Image as ImageIcon,
   TrendingUp,
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import { toPersianNumber } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -18,7 +18,6 @@ export default async function DashboardPage() {
     select: { name: true, email: true, role: true },
   });
 
-  // آمار
   const [sitesCount, themesCount, submissionsCount, unreadCount] =
     await Promise.all([
       db.site.count(),
@@ -27,7 +26,6 @@ export default async function DashboardPage() {
       db.submission.count({ where: { isRead: false } }),
     ]);
 
-  // آخرین سایت‌ها
   const recentSites = await db.site.findMany({
     take: 5,
     orderBy: { createdAt: "desc" },
@@ -37,7 +35,6 @@ export default async function DashboardPage() {
     },
   });
 
-  // آخرین پیام‌ها
   const recentSubmissions = await db.submission.findMany({
     take: 5,
     orderBy: { createdAt: "desc" },
@@ -51,32 +48,32 @@ export default async function DashboardPage() {
       title: "سایت‌ها",
       value: sitesCount,
       icon: Globe,
-      color: "text-teal-600",
-      bg: "bg-teal-50",
+      color: "text-indigo-500",
+      bg: "bg-indigo-500/10",
       href: "/sites",
     },
     {
       title: "تم‌ها",
       value: themesCount,
       icon: Palette,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
+      color: "text-purple-500",
+      bg: "bg-purple-500/10",
       href: "/themes",
     },
     {
       title: "پیام‌ها",
       value: submissionsCount,
       icon: MessageSquare,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
       href: "/submissions",
     },
     {
-      title: "پیام‌های خوانده‌نشده",
+      title: "خوانده‌نشده",
       value: unreadCount,
       icon: TrendingUp,
-      color: "text-orange-600",
-      bg: "bg-orange-50",
+      color: "text-orange-500",
+      bg: "bg-orange-500/10",
       href: "/submissions",
     },
   ];
@@ -104,7 +101,7 @@ export default async function DashboardPage() {
               <Link
                 key={stat.title}
                 href={stat.href}
-                className="bg-white rounded-xl border p-5 hover:shadow-md transition-shadow group"
+                className="bg-card rounded-xl border p-5 hover:shadow-md transition-shadow group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div
@@ -114,7 +111,9 @@ export default async function DashboardPage() {
                   </div>
                   <ArrowUpRight className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <div className="text-3xl font-bold mb-1">{stat.value}</div>
+                <div className="text-3xl font-bold mb-1">
+                  {toPersianNumber(stat.value)}
+                </div>
                 <div className="text-sm text-muted-foreground">
                   {stat.title}
                 </div>
@@ -126,7 +125,7 @@ export default async function DashboardPage() {
         {/* دو ستونه */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* آخرین سایت‌ها */}
-          <div className="bg-white rounded-xl border">
+          <div className="bg-card rounded-xl border">
             <div className="flex items-center justify-between p-5 border-b">
               <h3 className="font-semibold">آخرین سایت‌ها</h3>
               <Link
@@ -158,7 +157,7 @@ export default async function DashboardPage() {
                     <div
                       className="size-10 rounded-lg flex items-center justify-center text-white text-sm font-bold"
                       style={{
-                        backgroundColor: site.theme?.primary || "#14B8A6",
+                        backgroundColor: site.theme?.primary || "#6366F1",
                       }}
                     >
                       {site.name.charAt(0)}
@@ -172,7 +171,7 @@ export default async function DashboardPage() {
                       </div>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {site._count.pages} صفحه
+                      {toPersianNumber(site._count.pages)} صفحه
                     </div>
                   </Link>
                 ))
@@ -181,7 +180,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* آخرین پیام‌ها */}
-          <div className="bg-white rounded-xl border">
+          <div className="bg-card rounded-xl border">
             <div className="flex items-center justify-between p-5 border-b">
               <h3 className="font-semibold">آخرین پیام‌ها</h3>
               <Link
@@ -203,7 +202,7 @@ export default async function DashboardPage() {
                     href="/submissions"
                     className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary transition-colors"
                   >
-                    <div className="size-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                    <div className="size-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
                       <MessageSquare className="size-5" />
                     </div>
                     <div className="flex-1 min-w-0">

@@ -47,7 +47,7 @@ export interface BlockDefinition {
 // ═══════════════════════════════════════
 export const BLOCKS: Record<string, BlockDefinition> = {
   // ──────── Header ────────
-  header: {
+    header: {
     code: "header",
     label: "هدر",
     icon: "layout-top",
@@ -72,6 +72,16 @@ export const BLOCKS: Record<string, BlockDefinition> = {
           { key: "is_active", type: "toggle", label: "فعال" },
         ],
       },
+      {
+        key: "cta_text",
+        type: "text",
+        label: "متن دکمه CTA (فقط در طرح ۲)",
+      },
+      {
+        key: "cta_link",
+        type: "url",
+        label: "لینک دکمه CTA",
+      },
     ],
     defaultContent: {
       logo: "",
@@ -79,7 +89,11 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         { title: "معرفی", link: "#", is_active: true },
         { title: "راهنما استفاده", link: "#", is_active: false },
         { title: "قوانین اعتبار", link: "#", is_active: false },
+        { title: "همکاران ما", link: "#", is_active: false },
+        { title: "سوالات متداول", link: "#", is_active: false },
       ],
+      cta_text: "شروع کنید",
+      cta_link: "#",
     },
   },
 

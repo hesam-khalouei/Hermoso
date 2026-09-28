@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { MoreVertical, Edit, Trash2, Palette } from "lucide-react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { MoreVertical, Edit, Trash2, Palette } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toPersianNumber } from "@/lib/utils";
 
 interface Theme {
   id: string;
@@ -50,7 +50,7 @@ export function ThemesList({ themes }: ThemesListProps) {
 
   if (themes.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border p-16 text-center">
+      <div className="bg-card rounded-2xl border p-16 text-center">
         <div className="size-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
           <Palette className="size-8" />
         </div>
@@ -73,10 +73,12 @@ export function ThemesList({ themes }: ThemesListProps) {
       {themes.map((theme) => (
         <div
           key={theme.id}
-          className="bg-white rounded-2xl border overflow-hidden hover:shadow-md transition-shadow group"
+          className="bg-card rounded-2xl border overflow-hidden hover:shadow-md transition-shadow group"
         >
-          {/* پیش‌نمایش رنگ‌ها */}
-          <div className="h-32 relative" style={{ backgroundColor: theme.background }}>
+          <div
+            className="h-32 relative"
+            style={{ backgroundColor: theme.background }}
+          >
             <div className="absolute inset-0 flex items-center justify-center gap-2">
               <div
                 className="size-12 rounded-xl shadow-sm"
@@ -98,13 +100,12 @@ export function ThemesList({ themes }: ThemesListProps) {
             )}
           </div>
 
-          {/* اطلاعات */}
           <div className="p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold truncate">{theme.name}</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {theme.fontFamily} • {theme._count.sites} سایت
+                  {theme.fontFamily} • {toPersianNumber(theme._count.sites)} سایت
                 </p>
               </div>
 
@@ -135,7 +136,6 @@ export function ThemesList({ themes }: ThemesListProps) {
               </DropdownMenu>
             </div>
 
-            {/* رنگ‌های کوچیک */}
             <div className="flex gap-1 mb-3">
               {[
                 theme.primary,
@@ -153,7 +153,6 @@ export function ThemesList({ themes }: ThemesListProps) {
               ))}
             </div>
 
-            {/* دکمه ویرایش */}
             <Link
               href={`/themes/${theme.id}`}
               className="block w-full text-center bg-secondary hover:bg-secondary/80 text-sm font-medium py-2 rounded-lg transition"

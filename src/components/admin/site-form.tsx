@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Save, ArrowRight, Globe, AlertCircle } from "lucide-react";
+import { Save, ArrowRight, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { slugify } from "@/lib/utils";
 
@@ -41,7 +41,6 @@ export function SiteForm({ themes }: SiteFormProps) {
 
   function handleNameChange(value: string) {
     setName(value);
-    // اگه slug دستی تغییر نکرده، خودکار بساز
     if (!slug || slug === slugify(name)) {
       setSlug(slugify(value));
     }
@@ -102,7 +101,7 @@ export function SiteForm({ themes }: SiteFormProps) {
 
       <div className="space-y-6">
         {/* اطلاعات پایه */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
+        <div className="bg-card rounded-2xl border p-6 space-y-5">
           <div>
             <h3 className="font-semibold mb-1">اطلاعات پایه</h3>
             <p className="text-xs text-muted-foreground">
@@ -158,7 +157,7 @@ export function SiteForm({ themes }: SiteFormProps) {
         </div>
 
         {/* انتخاب تم */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
+        <div className="bg-card rounded-2xl border p-6 space-y-5">
           <div>
             <h3 className="font-semibold mb-1">انتخاب تم</h3>
             <p className="text-xs text-muted-foreground">
@@ -198,12 +197,11 @@ export function SiteForm({ themes }: SiteFormProps) {
             </Select>
           </div>
 
-          {/* پیش‌نمایش تم انتخابی */}
           {selectedTheme && (
             <div
               className="p-5 rounded-xl border"
               style={{
-                backgroundColor: "#F8FAFC",
+                backgroundColor: "hsl(var(--secondary))",
                 borderColor: selectedTheme.primary,
               }}
             >

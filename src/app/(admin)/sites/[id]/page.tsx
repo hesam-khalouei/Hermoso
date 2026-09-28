@@ -13,7 +13,7 @@ import {
   Plus,
   ArrowRight,
 } from "lucide-react";
-import { toPersianDate } from "@/lib/utils";
+import { toPersianDate, toPersianNumber } from "@/lib/utils";
 
 export default async function SiteEditPage({
   params,
@@ -58,11 +58,14 @@ export default async function SiteEditPage({
         <div
           className="rounded-2xl p-6 text-white"
           style={{
-            background: `linear-gradient(135deg, ${site.theme?.primary || "#14B8A6"}, ${site.theme?.accent || "#06B6D4"})`,
+            background: `linear-gradient(135deg, ${site.theme?.primary || "#6366F1"}, ${site.theme?.accent || "#06B6D4"})`,
           }}
         >
           <div className="flex items-center gap-4">
-            <div className="size-16 rounded-2xl bg-white/90 flex items-center justify-center text-2xl font-bold" style={{ color: site.theme?.primary }}>
+            <div
+              className="size-16 rounded-2xl bg-white/90 flex items-center justify-center text-2xl font-bold"
+              style={{ color: site.theme?.primary }}
+            >
               {site.name.charAt(0)}
             </div>
             <div className="flex-1">
@@ -94,9 +97,9 @@ export default async function SiteEditPage({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             href={`/sites/${site.id}/appearance`}
-            className="bg-white rounded-2xl border p-5 hover:shadow-md transition group"
+            className="bg-card rounded-2xl border p-5 hover:shadow-md transition group"
           >
-            <div className="size-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-3">
+            <div className="size-12 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center mb-3">
               <Palette className="size-6" />
             </div>
             <h3 className="font-semibold mb-1">تنظیمات ظاهری</h3>
@@ -107,9 +110,9 @@ export default async function SiteEditPage({
 
           <Link
             href={`/sites/${site.id}/settings`}
-            className="bg-white rounded-2xl border p-5 hover:shadow-md transition group"
+            className="bg-card rounded-2xl border p-5 hover:shadow-md transition group"
           >
-            <div className="size-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+            <div className="size-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-3">
               <Settings className="size-6" />
             </div>
             <h3 className="font-semibold mb-1">تنظیمات سایت</h3>
@@ -120,9 +123,9 @@ export default async function SiteEditPage({
 
           <Link
             href={`/sites/${site.id}/seo`}
-            className="bg-white rounded-2xl border p-5 hover:shadow-md transition group"
+            className="bg-card rounded-2xl border p-5 hover:shadow-md transition group"
           >
-            <div className="size-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-3">
+            <div className="size-12 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center mb-3">
               <FileText className="size-6" />
             </div>
             <h3 className="font-semibold mb-1">SEO</h3>
@@ -133,7 +136,7 @@ export default async function SiteEditPage({
         </div>
 
         {/* لیست صفحات */}
-        <div className="bg-white rounded-2xl border">
+        <div className="bg-card rounded-2xl border">
           <div className="flex items-center justify-between p-5 border-b">
             <div>
               <h3 className="font-semibold">صفحات سایت</h3>
@@ -167,7 +170,8 @@ export default async function SiteEditPage({
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    {page._count.blocks} بلاک • /{page.slug} • ساخته‌شده {toPersianDate(page.createdAt)}
+                    {toPersianNumber(page._count.blocks)} بلاک • /{page.slug} •
+                    ساخته‌شده {toPersianDate(page.createdAt)}
                   </div>
                 </div>
                 <Edit className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition" />

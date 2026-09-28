@@ -44,3 +44,7 @@ prisma/migrations/dev.db*
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# uploads (فایل‌های آپلودی کاربران)
+/public/uploads/*
+!/public/uploads/.gitkeep

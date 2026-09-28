@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
 import {
   MoreVertical,
@@ -19,8 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { toPersianDate } from "@/lib/utils";
+import { toPersianDate, toPersianNumber } from "@/lib/utils";
 
 interface Site {
   id: string;
@@ -50,7 +48,11 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
   const router = useRouter();
 
   async function handleDelete(id: string, name: string) {
-    if (!confirm(`آیا از حذف سایت «${name}» مطمئنی؟\n\nهمه صفحات و محتواش پاک میشه!`))
+    if (
+      !confirm(
+        `آیا از حذف سایت «${name}» مطمئنی؟\n\nهمه صفحات و محتواش پاک میشه!`
+      )
+    )
       return;
 
     const res = await fetch(`/api/sites/${id}`, { method: "DELETE" });
@@ -63,11 +65,10 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
     }
   }
 
-  // حالت اول: هنوز تمی نساخته
   if (!hasThemes) {
     return (
-      <div className="bg-white rounded-2xl border p-16 text-center">
-        <div className="size-16 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-4">
+      <div className="bg-card rounded-2xl border p-16 text-center">
+        <div className="size-16 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mx-auto mb-4">
           <Globe className="size-8" />
         </div>
         <h3 className="text-lg font-semibold mb-2">اول باید یه تم بسازی</h3>
@@ -84,10 +85,9 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
     );
   }
 
-  // حالت دوم: تم داره ولی سایتی نساخته
   if (sites.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border p-16 text-center">
+      <div className="bg-card rounded-2xl border p-16 text-center">
         <div className="size-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
           <Globe className="size-8" />
         </div>
@@ -105,15 +105,13 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
     );
   }
 
-  // حالت سوم: لیست سایت‌ها
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {sites.map((site) => (
         <div
           key={site.id}
-          className="bg-white rounded-2xl border overflow-hidden hover:shadow-md transition-shadow"
+          className="bg-card rounded-2xl border overflow-hidden hover:shadow-md transition-shadow"
         >
-          {/* پیش‌نمایش بالا */}
           <div
             className="h-32 relative flex items-center justify-center"
             style={{
@@ -130,13 +128,15 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
               />
             ) : (
               <div className="size-14 rounded-2xl bg-white/90 flex items-center justify-center">
-                <span className="text-2xl font-bold" style={{ color: site.theme?.primary }}>
+                <span
+                  className="text-2xl font-bold"
+                  style={{ color: site.theme?.primary }}
+                >
                   {site.name.charAt(0)}
                 </span>
               </div>
             )}
 
-            {/* بج وضعیت */}
             <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-medium border">
               {site.isActive ? (
                 <span className="flex items-center gap-1 text-green-700">
@@ -152,12 +152,14 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
             </div>
           </div>
 
-          {/* اطلاعات */}
           <div className="p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold truncate">{site.name}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5 truncate" dir="ltr">
+                <p
+                  className="text-xs text-muted-foreground mt-0.5 truncate"
+                  dir="ltr"
+                >
                   {site.domain || `/${site.slug}`}
                 </p>
               </div>
@@ -199,11 +201,10 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
               </DropdownMenu>
             </div>
 
-            {/* متادیتا */}
             <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
               <span className="flex items-center gap-1">
                 <FileText className="size-3.5" />
-                {site._count.pages} صفحه
+                {toPersianNumber(site._count.pages)} صفحه
               </span>
               {site.theme && (
                 <span className="flex items-center gap-1 truncate">
@@ -216,7 +217,6 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
               )}
             </div>
 
-            {/* دکمه‌ها */}
             <div className="flex gap-2">
               <Link
                 href={`/sites/${site.id}`}
@@ -234,7 +234,6 @@ export function SitesList({ sites, hasThemes }: SitesListProps) {
               </Link>
             </div>
 
-            {/* تاریخ */}
             <div className="mt-3 pt-3 border-t text-xs text-muted-foreground text-center">
               ساخته‌شده در {toPersianDate(site.createdAt)}
             </div>
