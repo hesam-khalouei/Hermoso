@@ -103,15 +103,14 @@ export function RichTextEditor({
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-    editorProps: {
+        editorProps: {
       attributes: {
         class: cn(
           "prose prose-sm dark:prose-invert max-w-none",
-          "focus:outline-none p-3 min-h-[100px] leading-8 text-foreground",
-          dir === "rtl" ? "text-right" : "text-left"
+          "focus:outline-none p-3 min-h-[100px] leading-8 text-foreground text-right"
         ),
-        dir: dir,
-        style: `min-height: ${minHeight}px; direction: ${dir};`,
+        dir: "rtl",
+        style: `min-height: ${minHeight}px; direction: rtl; text-align: right;`,
       },
     },
   });

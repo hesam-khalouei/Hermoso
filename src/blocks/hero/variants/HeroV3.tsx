@@ -2,46 +2,65 @@
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
 import { RenderedContent } from "@/components/ui/rendered-content";
+import { sizeToCss } from "@/components/admin/size-field";
 
 interface HeroV3Props {
   content: {
     title?: string;
     subtitle?: string;
     image?: string;
+    height?: any;
+    padding_y?: any;
     buttons?: {
       text: string;
       link: string;
       style?: string;
       icon?: string;
+      size?: any;
+      font_size?: any;
+      padding_x?: any;
     }[];
   };
 }
 
 export default function HeroV3({ content }: HeroV3Props) {
-  const { title = "", subtitle = "", image = "", buttons = [] } = content;
+  const {
+    title = "",
+    subtitle = "",
+    image = "",
+    height,
+    padding_y,
+    buttons = [],
+  } = content;
+
+  const blockHeight = sizeToCss(height, "700px");
+  const verticalPadding = sizeToCss(padding_y, "80px");
 
   return (
     <section
       dir="rtl"
-      className="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden"
-      style={{ fontFamily: "var(--site-font)" }}
+      className="relative flex items-center overflow-hidden"
+      style={{
+        fontFamily: "var(--site-font)",
+        minHeight: blockHeight,
+      }}
     >
-      {/* تصویر پس‌زمینه */}
       {image ? (
         <div className="absolute inset-0">
-          <img
-            src={image}
-            alt=""
-            className="w-full h-full object-cover"
-          />
+          <img src={image} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/50 to-black/30" />
         </div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-700" />
       )}
 
-      {/* محتوا */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20 w-full">
+      <div
+        className="relative max-w-7xl mx-auto px-6 lg:px-8 w-full"
+        style={{
+          paddingTop: verticalPadding,
+          paddingBottom: verticalPadding,
+        }}
+      >
         <div className="max-w-2xl ml-auto text-right space-y-6">
           <RenderedContent
             html={title}
@@ -62,7 +81,7 @@ export default function HeroV3({ content }: HeroV3Props) {
                 <a
                   key={i}
                   href={btn.link || "#"}
-                  className="inline-flex items-center justify-center gap-2 h-12 px-6 font-semibold text-sm transition-all hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-2 font-semibold transition-all hover:-translate-y-0.5"
                   style={{
                     backgroundColor:
                       btn.style === "primary"
@@ -70,6 +89,10 @@ export default function HeroV3({ content }: HeroV3Props) {
                         : "#FFFFFF",
                     color:
                       btn.style === "primary" ? "#FFFFFF" : "#18181B",
+                    height: sizeToCss(btn.size, "48px"),
+                    paddingLeft: sizeToCss(btn.padding_x, "24px"),
+                    paddingRight: sizeToCss(btn.padding_x, "24px"),
+                    fontSize: sizeToCss(btn.font_size, "14px"),
                     borderRadius: "var(--site-radius)",
                     boxShadow: "0 2px 0 0 rgb(24, 24, 27)",
                     border: "2px solid rgb(24, 24, 27)",
@@ -90,7 +113,6 @@ export default function HeroV3({ content }: HeroV3Props) {
         </div>
       </div>
 
-      {/* استایل برای متن سفید روی عکس */}
       <style jsx>{`
         h1,
         h1 :global(*) {

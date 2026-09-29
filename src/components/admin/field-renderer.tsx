@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ImageField } from "./image-field";
 import { IconPicker } from "./icon-picker";
 import { ColorPicker } from "./color-picker";
+import { SizeField } from "./size-field";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { RichTextEditorCompact } from "@/components/ui/rich-text-editor-compact";
 import type { BlockField } from "@/blocks/registry";
@@ -39,7 +40,7 @@ export function FieldRenderer({
   onChange,
   siteId,
 }: FieldRendererProps) {
-  // ═══════ text (ادیتور Compact) ═══════
+  // ═══════ text ═══════
   if (field.type === "text") {
     return (
       <div className="space-y-2">
@@ -56,7 +57,7 @@ export function FieldRenderer({
     );
   }
 
-  // ═══════ textarea (ادیتور Full) ═══════
+  // ═══════ textarea ═══════
   if (field.type === "textarea") {
     return (
       <div className="space-y-2">
@@ -74,7 +75,7 @@ export function FieldRenderer({
     );
   }
 
-  // ═══════ richtext (ادیتور Full با ارتفاع بیشتر) ═══════
+  // ═══════ richtext ═══════
   if (field.type === "richtext") {
     return (
       <div className="space-y-2">
@@ -139,6 +140,17 @@ export function FieldRenderer({
       <ColorPicker
         label={field.label}
         value={value || "#000000"}
+        onChange={onChange}
+      />
+    );
+  }
+
+  // ═══════ size ═══════
+  if (field.type === "size") {
+    return (
+      <SizeField
+        label={field.label}
+        value={value}
         onChange={onChange}
       />
     );

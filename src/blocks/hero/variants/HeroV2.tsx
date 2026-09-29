@@ -2,18 +2,25 @@
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
 import { RenderedContent } from "@/components/ui/rendered-content";
+import { sizeToCss } from "@/components/admin/size-field";
 
 interface HeroV2Props {
   content: {
     title?: string;
     subtitle?: string;
     image?: string;
+    image_size?: any;
+    height?: any;
+    padding_y?: any;
     background_color?: string;
     buttons?: {
       text: string;
       link: string;
       style?: string;
       icon?: string;
+      size?: any;
+      font_size?: any;
+      padding_x?: any;
     }[];
   };
 }
@@ -23,9 +30,16 @@ export default function HeroV2({ content }: HeroV2Props) {
     title = "",
     subtitle = "",
     image = "",
+    image_size,
+    height,
+    padding_y,
     background_color = "#F8FAFC",
     buttons = [],
   } = content;
+
+  const blockHeight = sizeToCss(height, "auto");
+  const verticalPadding = sizeToCss(padding_y, "80px");
+  const imgSize = sizeToCss(image_size, "100%");
 
   return (
     <section
@@ -34,9 +48,9 @@ export default function HeroV2({ content }: HeroV2Props) {
       style={{
         backgroundColor: background_color,
         fontFamily: "var(--site-font)",
+        minHeight: blockHeight,
       }}
     >
-      {/* پس‌زمینه شبکه‌ای */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -49,8 +63,13 @@ export default function HeroV2({ content }: HeroV2Props) {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
-        {/* متن و دکمه‌ها - وسط */}
+      <div
+        className="relative max-w-5xl mx-auto px-6 lg:px-8"
+        style={{
+          paddingTop: verticalPadding,
+          paddingBottom: verticalPadding,
+        }}
+      >
         <div className="text-center space-y-6 max-w-3xl mx-auto">
           <RenderedContent
             html={title}
@@ -71,13 +90,17 @@ export default function HeroV2({ content }: HeroV2Props) {
                 <a
                   key={i}
                   href={btn.link || "#"}
-                  className="inline-flex items-center justify-center gap-2 h-12 px-6 font-semibold text-sm transition-all hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-2 font-semibold transition-all hover:-translate-y-0.5"
                   style={{
                     backgroundColor:
                       btn.style === "primary"
                         ? "var(--site-primary)"
                         : "var(--site-bg)",
                     color: "var(--site-text)",
+                    height: sizeToCss(btn.size, "48px"),
+                    paddingLeft: sizeToCss(btn.padding_x, "24px"),
+                    paddingRight: sizeToCss(btn.padding_x, "24px"),
+                    fontSize: sizeToCss(btn.font_size, "14px"),
                     borderRadius: "var(--site-radius)",
                     boxShadow: "0 2px 0 0 rgb(24, 24, 27)",
                     border: "2px solid rgb(24, 24, 27)",
@@ -97,18 +120,22 @@ export default function HeroV2({ content }: HeroV2Props) {
           )}
         </div>
 
-        {/* تصویر - پایین وسط */}
+        {/* تصویر پایین */}
         <div className="mt-12 flex justify-center">
           {image ? (
             <img
               src={image}
               alt=""
-              className="w-full max-w-3xl h-auto object-contain"
+              className="h-auto object-contain"
+              style={{ width: imgSize }}
             />
           ) : (
             <div
-              className="w-full max-w-3xl aspect-[16/9] rounded-3xl flex items-center justify-center border-2 border-dashed"
-              style={{ borderColor: "var(--site-border)" }}
+              className="aspect-[16/9] rounded-3xl flex items-center justify-center border-2 border-dashed"
+              style={{
+                width: imgSize,
+                borderColor: "var(--site-border)",
+              }}
             >
               <div
                 className="text-sm"

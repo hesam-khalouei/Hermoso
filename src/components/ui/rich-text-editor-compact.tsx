@@ -63,7 +63,6 @@ export function RichTextEditorCompact({
   value,
   onChange,
   placeholder = "اینجا بنویسید...",
-  dir = "rtl",
 }: RichTextEditorCompactProps) {
   const editor = useEditor({
     extensions: [
@@ -89,11 +88,10 @@ export function RichTextEditorCompact({
     editorProps: {
       attributes: {
         class: cn(
-          "focus:outline-none px-3 py-2 text-sm leading-7 text-foreground",
-          dir === "rtl" ? "text-right" : "text-left"
+          "focus:outline-none px-3 py-2 text-sm leading-7 text-foreground text-right"
         ),
-        dir: dir,
-        style: `direction: ${dir};`,
+        dir: "rtl",
+        style: "direction: rtl; text-align: right;",
       },
     },
   });

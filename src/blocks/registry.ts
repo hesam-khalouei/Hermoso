@@ -10,7 +10,8 @@ export type FieldType =
   | "select"
   | "toggle"
   | "repeater"
-  | "group";
+  | "group"
+  | "size";
 
 export interface BlockField {
   key: string;
@@ -21,7 +22,8 @@ export interface BlockField {
   options?: { label: string; value: string }[];
   min?: number;
   max?: number;
-  fields?: BlockField[]; // برای group و repeater
+  helpText?: string;
+  fields?: BlockField[];
 }
 
 export interface BlockVariant {
@@ -47,7 +49,7 @@ export interface BlockDefinition {
 // ═══════════════════════════════════════
 export const BLOCKS: Record<string, BlockDefinition> = {
   // ──────── Header ────────
-    header: {
+  header: {
     code: "header",
     label: "هدر",
     icon: "layout-top",
@@ -60,6 +62,16 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     defaultVariant: "v1",
     fields: [
       { key: "logo", type: "image", label: "لوگو" },
+      {
+        key: "logo_size",
+        type: "size",
+        label: "اندازه لوگو",
+      },
+      {
+        key: "height",
+        type: "size",
+        label: "ارتفاع هدر",
+      },
       {
         key: "menu_items",
         type: "repeater",
@@ -82,9 +94,16 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         type: "url",
         label: "لینک دکمه CTA",
       },
+      {
+        key: "cta_size",
+        type: "size",
+        label: "ارتفاع دکمه CTA",
+      },
     ],
     defaultContent: {
       logo: "",
+      logo_size: { custom: 40, unit: "px" },
+      height: { custom: 64, unit: "px" },
       menu_items: [
         { title: "معرفی", link: "#", is_active: true },
         { title: "راهنما استفاده", link: "#", is_active: false },
@@ -94,11 +113,12 @@ export const BLOCKS: Record<string, BlockDefinition> = {
       ],
       cta_text: "شروع کنید",
       cta_link: "#",
+      cta_size: { custom: 40, unit: "px" },
     },
   },
 
   // ──────── Hero ────────
-    hero: {
+  hero: {
     code: "hero",
     label: "هیرو اصلی",
     icon: "sparkles",
@@ -119,12 +139,6 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         placeholder: "آغاز طرح اعتبار پوشاک",
       },
       {
-        key: "title_highlight",
-        type: "textarea",
-        label: "کلمه رنگی در عنوان",
-        placeholder: "اعتبار",
-      },
-      {
         key: "subtitle",
         type: "textarea",
         label: "زیرعنوان",
@@ -134,6 +148,23 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         key: "image",
         type: "image",
         label: "تصویر",
+      },
+      {
+        key: "image_size",
+        type: "size",
+        label: "عرض تصویر",
+      },
+      {
+        key: "height",
+        type: "size",
+        label: "ارتفاع Hero",
+        helpText: "حداقل ارتفاع بلاک",
+      },
+      {
+        key: "padding_y",
+        type: "size",
+        label: "فاصله عمودی",
+        helpText: "فاصله بالا و پایین محتوا",
       },
       {
         key: "background_color",
@@ -159,15 +190,20 @@ export const BLOCKS: Record<string, BlockDefinition> = {
             ],
           },
           { key: "icon", type: "icon", label: "آیکن (اختیاری)" },
+          { key: "size", type: "size", label: "ارتفاع دکمه" },
+          { key: "font_size", type: "size", label: "اندازه فونت دکمه" },
+          { key: "padding_x", type: "size", label: "فاصله افقی دکمه" },
         ],
       },
     ],
     defaultContent: {
       title: "آغاز طرح اعتبار پوشاک",
-      title_highlight: "اعتبار",
       subtitle:
         "توضیح کوتاه درباره طرح شما که بازدیدکننده را ترغیب به ادامه می‌کند",
       image: "",
+      image_size: { custom: 500, unit: "px" },
+      height: { custom: 600, unit: "px" },
+      padding_y: { custom: 80, unit: "px" },
       background_color: "#030712",
       buttons: [
         {
@@ -175,12 +211,18 @@ export const BLOCKS: Record<string, BlockDefinition> = {
           link: "#",
           style: "secondary",
           icon: "",
+          size: { custom: 48, unit: "px" },
+          font_size: { custom: 14, unit: "px" },
+          padding_x: { custom: 24, unit: "px" },
         },
         {
           text: "نسخه وب اپلیکیشن",
           link: "#",
           style: "primary",
           icon: "",
+          size: { custom: 48, unit: "px" },
+          font_size: { custom: 14, unit: "px" },
+          padding_x: { custom: 24, unit: "px" },
         },
       ],
     },
@@ -201,9 +243,13 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     fields: [
       { key: "badge", type: "text", label: "برچسب بالا" },
       { key: "title", type: "text", label: "عنوان" },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی" },
       { key: "description", type: "richtext", label: "توضیحات" },
       { key: "image", type: "image", label: "تصویر" },
+      {
+        key: "image_size",
+        type: "size",
+        label: "عرض تصویر",
+      },
       {
         key: "button",
         type: "group",
@@ -211,17 +257,26 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         fields: [
           { key: "text", type: "text", label: "متن" },
           { key: "link", type: "url", label: "لینک" },
+          { key: "size", type: "size", label: "ارتفاع دکمه" },
+          { key: "font_size", type: "size", label: "اندازه فونت دکمه" },
+          { key: "padding_x", type: "size", label: "فاصله افقی دکمه" },
         ],
       },
     ],
     defaultContent: {
       badge: "",
       title: "استفاده از اعتبار پوشاک",
-      title_highlight: "اعتبار",
       description:
         "از این پس کارکنان شرکت می‌توانند بدون نیاز به ضامن یا وثیقه خرید کنند...",
       image: "",
-      button: { text: "نسخه وب اپلیکیشن", link: "#" },
+      image_size: { custom: 500, unit: "px" },
+      button: {
+        text: "نسخه وب اپلیکیشن",
+        link: "#",
+        size: { custom: 48, unit: "px" },
+        font_size: { custom: 14, unit: "px" },
+        padding_x: { custom: 24, unit: "px" },
+      },
     },
   },
 
@@ -240,9 +295,13 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     defaultVariant: "v1",
     fields: [
       { key: "title", type: "text", label: "عنوان" },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی" },
       { key: "description", type: "textarea", label: "توضیحات" },
       { key: "image", type: "image", label: "تصویر موبایل" },
+      {
+        key: "image_size",
+        type: "size",
+        label: "عرض تصویر",
+      },
       {
         key: "steps",
         type: "repeater",
@@ -259,9 +318,9 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     ],
     defaultContent: {
       title: "راهنمای خرید آنلاین",
-      title_highlight: "راهنمای",
       description: "از این پس کارکنان می‌توانند بدون نیاز به ضامن خرید کنند...",
       image: "",
+      image_size: { custom: 260, unit: "px" },
       steps: [
         { number: 1, title: "ثبت‌نام در اوانو", description: "توضیحات مرحله اول" },
         { number: 2, title: "خرید حضوری", description: "توضیحات مرحله دوم" },
@@ -284,7 +343,6 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     defaultVariant: "v1",
     fields: [
       { key: "title", type: "text", label: "عنوان" },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی" },
       { key: "description", type: "textarea", label: "توضیحات" },
       {
         key: "cards",
@@ -301,10 +359,14 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         ],
       },
       { key: "image", type: "image", label: "تصویر" },
+      {
+        key: "image_size",
+        type: "size",
+        label: "عرض تصویر",
+      },
     ],
     defaultContent: {
       title: "قوانین کلی اعتبار",
-      title_highlight: "اعتبار",
       description: "از این پس کارکنان شرکت گسترش انرژی پاسارگاد...",
       cards: [
         {
@@ -323,6 +385,7 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         },
       ],
       image: "",
+      image_size: { custom: 500, unit: "px" },
     },
   },
 
@@ -349,6 +412,7 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         max: 12,
         fields: [
           { key: "icon", type: "icon", label: "آیکن" },
+          { key: "icon_size", type: "size", label: "اندازه آیکن" },
           { key: "title", type: "text", label: "عنوان" },
           { key: "description", type: "textarea", label: "توضیحات" },
         ],
@@ -358,9 +422,24 @@ export const BLOCKS: Record<string, BlockDefinition> = {
       title: "ویژگی‌های ما",
       description: "",
       items: [
-        { icon: "star", title: "ویژگی اول", description: "توضیحات..." },
-        { icon: "shield", title: "ویژگی دوم", description: "توضیحات..." },
-        { icon: "zap", title: "ویژگی سوم", description: "توضیحات..." },
+        {
+          icon: "star",
+          icon_size: { custom: 40, unit: "px" },
+          title: "ویژگی اول",
+          description: "توضیحات...",
+        },
+        {
+          icon: "shield",
+          icon_size: { custom: 40, unit: "px" },
+          title: "ویژگی دوم",
+          description: "توضیحات...",
+        },
+        {
+          icon: "zap",
+          icon_size: { custom: 40, unit: "px" },
+          title: "ویژگی سوم",
+          description: "توضیحات...",
+        },
       ],
     },
   },
@@ -379,7 +458,6 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     defaultVariant: "v1",
     fields: [
       { key: "title", type: "text", label: "عنوان" },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی" },
       { key: "description", type: "textarea", label: "توضیحات" },
       {
         key: "categories",
@@ -388,6 +466,11 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         min: 0,
         max: 10,
         fields: [{ key: "title", type: "text", label: "عنوان" }],
+      },
+      {
+        key: "logo_size",
+        type: "size",
+        label: "اندازه لوگوها",
       },
       {
         key: "logos",
@@ -405,9 +488,9 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     ],
     defaultContent: {
       title: "فروشگاه‌های طرف قرارداد",
-      title_highlight: "فروشگاه‌های",
       description: "با اعتبار اوانو از معتبرترین فروشگاه‌ها خرید کنید!",
       categories: [],
+      logo_size: { custom: 80, unit: "px" },
       logos: [
         { image: "", name: "رفاه", link: "", category: "" },
         { image: "", name: "افق کوروش", link: "", category: "" },
@@ -430,7 +513,6 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     defaultVariant: "v2",
     fields: [
       { key: "title", type: "text", label: "عنوان" },
-      { key: "title_highlight", type: "text", label: "کلمه رنگی" },
       { key: "description", type: "textarea", label: "توضیحات" },
       {
         key: "items",
@@ -446,7 +528,6 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     ],
     defaultContent: {
       title: "سوالات متداول",
-      title_highlight: "سوالات",
       description: "",
       items: [
         { question: "سوال نمونه اول؟", answer: "پاسخ نمونه..." },
@@ -472,14 +553,18 @@ export const BLOCKS: Record<string, BlockDefinition> = {
       { key: "description", type: "textarea", label: "توضیحات" },
       { key: "button_text", type: "text", label: "متن دکمه" },
       { key: "button_link", type: "url", label: "لینک دکمه" },
+      { key: "button_size", type: "size", label: "ارتفاع دکمه" },
       { key: "image", type: "image", label: "تصویر" },
+      { key: "image_size", type: "size", label: "عرض تصویر" },
     ],
     defaultContent: {
       title: "همین حالا شروع کن!",
       description: "توضیحات کوتاه برای فراخوان",
       button_text: "شروع کنید",
       button_link: "#",
+      button_size: { custom: 48, unit: "px" },
       image: "",
+      image_size: { custom: 400, unit: "px" },
     },
   },
 
@@ -536,7 +621,7 @@ export const BLOCKS: Record<string, BlockDefinition> = {
   },
 
   // ──────── Footer ────────
-    footer: {
+  footer: {
     code: "footer",
     label: "فوتر",
     icon: "layout-bottom",
@@ -550,6 +635,11 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     fields: [
       { key: "logo", type: "image", label: "لوگو" },
       {
+        key: "logo_size",
+        type: "size",
+        label: "اندازه لوگو",
+      },
+      {
         key: "about_text",
         type: "textarea",
         label: "متن درباره ما",
@@ -560,6 +650,11 @@ export const BLOCKS: Record<string, BlockDefinition> = {
         type: "text",
         label: "متن کپی‌رایت",
         placeholder: "تمامی حقوق محفوظ است.",
+      },
+      {
+        key: "social_size",
+        type: "size",
+        label: "اندازه آیکن‌های اجتماعی",
       },
       {
         key: "socials",
@@ -587,9 +682,11 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     ],
     defaultContent: {
       logo: "",
+      logo_size: { custom: 48, unit: "px" },
       about_text:
         "اپلیکیشن جامع «اوانو» انواع خدمات مالی، اپراتوری، سفر و گردشگری، خرید بیمه و امور خیریه را به کاربران ارائه می‌دهد.",
       copyright: "تمامی حقوق برای اپلیکیشن اوانو محفوظ است.",
+      social_size: { custom: 40, unit: "px" },
       socials: [
         { icon: "Instagram", link: "https://instagram.com/" },
         { icon: "Twitter", link: "https://twitter.com/" },
