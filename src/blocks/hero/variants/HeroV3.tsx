@@ -1,7 +1,7 @@
 "use client";
 
-import { DynamicIcon } from "@/components/admin/icon-picker";
 import { RenderedContent } from "@/components/ui/rendered-content";
+import { StyleButton } from "@/components/ui/style-button";
 import { sizeToCss } from "@/components/admin/size-field";
 
 interface HeroV3Props {
@@ -78,35 +78,16 @@ export default function HeroV3({ content }: HeroV3Props) {
           {buttons.length > 0 && (
             <div className="flex flex-wrap gap-3 justify-end pt-2">
               {buttons.map((btn, i) => (
-                <a
+                <StyleButton
                   key={i}
-                  href={btn.link || "#"}
-                  className="inline-flex items-center justify-center gap-2 font-semibold transition-all hover:-translate-y-0.5"
-                  style={{
-                    backgroundColor:
-                      btn.style === "primary"
-                        ? "var(--site-primary)"
-                        : "#FFFFFF",
-                    color:
-                      btn.style === "primary" ? "#FFFFFF" : "#18181B",
-                    height: sizeToCss(btn.size, "48px"),
-                    paddingLeft: sizeToCss(btn.padding_x, "24px"),
-                    paddingRight: sizeToCss(btn.padding_x, "24px"),
-                    fontSize: sizeToCss(btn.font_size, "14px"),
-                    borderRadius: "var(--site-radius)",
-                    boxShadow: "0 2px 0 0 rgb(24, 24, 27)",
-                    border: "2px solid rgb(24, 24, 27)",
-                  }}
-                >
-                  {btn.icon && (
-                    <DynamicIcon name={btn.icon} className="size-4" />
-                  )}
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: String(btn.text || "").replace(/<[^>]*>/g, ""),
-                    }}
-                  />
-                </a>
+                  text={btn.text}
+                  link={btn.link}
+                  style={(btn.style as any) || "primary"}
+                  icon={btn.icon}
+                  size={btn.size}
+                  fontSize={btn.font_size}
+                  paddingX={btn.padding_x}
+                />
               ))}
             </div>
           )}
