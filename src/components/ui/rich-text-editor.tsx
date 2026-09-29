@@ -37,18 +37,12 @@ import {
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
-// ═══════════════════════════════════════
-// فونت‌ها
-// ═══════════════════════════════════════
 const fonts = [
   { label: "ایرانیکان", value: "IRANYekanX" },
   { label: "وزیرمتن", value: "Vazirmatn" },
   { label: "یکان‌بخ", value: "YekanBakh" },
 ];
 
-// ═══════════════════════════════════════
-// رنگ‌های پیشنهادی
-// ═══════════════════════════════════════
 const presetColors = [
   "#000000", "#18181B", "#374151", "#6B7280", "#9CA3AF",
   "#EF4444", "#F97316", "#F59E0B", "#EAB308", "#84CC16",
@@ -57,9 +51,6 @@ const presetColors = [
   "#EC4899", "#F43F5E", "#78350F", "#7C2D12",
 ];
 
-// ═══════════════════════════════════════
-// اندازه‌های فونت
-// ═══════════════════════════════════════
 const fontSizes = [
   { label: "کوچک", value: "14px" },
   { label: "معمولی", value: "16px" },
@@ -88,9 +79,7 @@ export function RichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-        },
+        heading: { levels: [1, 2, 3] },
       }),
       Underline,
       Link.configure({
@@ -105,13 +94,9 @@ export function RichTextEditor({
       }),
       Color,
       TextStyle,
-      Highlight.configure({
-        multicolor: true,
-      }),
+      Highlight.configure({ multicolor: true }),
       FontFamily,
-      Placeholder.configure({
-        placeholder,
-      }),
+      Placeholder.configure({ placeholder }),
     ],
     content: value || "",
     immediatelyRender: false,
@@ -131,7 +116,6 @@ export function RichTextEditor({
     },
   });
 
-  // سینک کردن مقدار از بیرون
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || "");
@@ -148,9 +132,8 @@ export function RichTextEditor({
 
   return (
     <div className="rounded-lg border border-input bg-background overflow-hidden">
-      {/* ═══════ Toolbar ═══════ */}
+      {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 p-2 bg-secondary/50 border-b">
-        {/* Heading */}
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           isActive={editor.isActive("heading", { level: 1 })}
@@ -175,7 +158,6 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Bold/Italic/Underline/Strikethrough */}
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           isActive={editor.isActive("bold")}
@@ -207,13 +189,11 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Size + Font dropdown */}
         <FontSizeSelect editor={editor} />
         <FontFamilySelect editor={editor} />
 
         <Divider />
 
-        {/* Colors */}
         <ColorPicker
           editor={editor}
           icon={<Palette className="size-4" />}
@@ -225,7 +205,7 @@ export function RichTextEditor({
         <ColorPicker
           editor={editor}
           icon={<Highlighter className="size-4" />}
-          title="پس‌زمینه متن"
+          title="پس‌زمینه"
           colors={["#FEF08A", "#FBCFE8", "#BFDBFE", "#BBF7D0", "#FED7AA"]}
           onPick={(color) =>
             editor.chain().focus().toggleHighlight({ color }).run()
@@ -236,7 +216,6 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Align */}
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
           isActive={editor.isActive({ textAlign: "right" })}
@@ -268,7 +247,6 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Lists */}
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           isActive={editor.isActive("bulletList")}
@@ -286,12 +264,10 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Link */}
         <LinkButton editor={editor} />
 
         <Divider />
 
-        {/* Undo/Redo */}
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
@@ -309,7 +285,6 @@ export function RichTextEditor({
 
         <Divider />
 
-        {/* Clear */}
         <ToolbarButton
           onClick={() =>
             editor.chain().focus().clearNodes().unsetAllMarks().run()
@@ -320,15 +295,12 @@ export function RichTextEditor({
         </ToolbarButton>
       </div>
 
-      {/* ═══════ Editor ═══════ */}
       <EditorContent editor={editor} />
     </div>
   );
 }
 
-// ═══════════════════════════════════════
-// کامپوننت‌های کمک
-// ═══════════════════════════════════════
+// ═══════ کامپوننت‌ها ═══════
 
 function ToolbarButton({
   children,
@@ -386,10 +358,7 @@ function FontSizeSelect({ editor }: { editor: Editor }) {
       </button>
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full mt-1 right-0 z-50 w-40 rounded-lg border bg-popover shadow-lg p-1 space-y-0.5">
             {fontSizes.map((size) => (
               <button
@@ -429,10 +398,7 @@ function FontFamilySelect({ editor }: { editor: Editor }) {
       </button>
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full mt-1 right-0 z-50 w-32 rounded-lg border bg-popover shadow-lg p-1 space-y-0.5">
             {fonts.map((font) => (
               <button
@@ -489,12 +455,8 @@ function ColorPicker({
       </button>
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full mt-1 right-0 z-50 w-64 rounded-lg border bg-popover shadow-lg p-3 space-y-3">
-            {/* پالت */}
             <div className="grid grid-cols-8 gap-1.5">
               {colors.map((color) => (
                 <button
@@ -511,7 +473,6 @@ function ColorPicker({
               ))}
             </div>
 
-            {/* Custom hex */}
             <div className="space-y-2 pt-2 border-t">
               <label className="text-xs text-muted-foreground">
                 کد رنگ دلخواه (hex)
@@ -537,7 +498,6 @@ function ColorPicker({
               </div>
             </div>
 
-            {/* حذف رنگ */}
             {onClear && (
               <button
                 type="button"
@@ -599,14 +559,9 @@ function LinkButton({ editor }: { editor: Editor }) {
       </button>
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full mt-1 right-0 z-50 w-72 rounded-lg border bg-popover shadow-lg p-3 space-y-2">
-            <label className="text-xs text-muted-foreground">
-              آدرس لینک
-            </label>
+            <label className="text-xs text-muted-foreground">آدرس لینک</label>
             <Input
               value={url}
               onChange={(e) => setUrl(e.target.value)}

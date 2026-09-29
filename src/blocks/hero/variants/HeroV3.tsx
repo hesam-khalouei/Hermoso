@@ -1,11 +1,11 @@
 "use client";
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface HeroV3Props {
   content: {
     title?: string;
-    title_highlight?: string;
     subtitle?: string;
     image?: string;
     buttons?: {
@@ -18,29 +18,7 @@ interface HeroV3Props {
 }
 
 export default function HeroV3({ content }: HeroV3Props) {
-  const {
-    title = "",
-    title_highlight = "",
-    subtitle = "",
-    image = "",
-    buttons = [],
-  } = content;
-
-  const renderTitle = () => {
-    if (!title_highlight || !title.includes(title_highlight)) {
-      return title;
-    }
-    const parts = title.split(title_highlight);
-    return (
-      <>
-        {parts[0]}
-        <span style={{ color: "var(--site-primary)" }}>
-          {title_highlight}
-        </span>
-        {parts[1]}
-      </>
-    );
-  };
+  const { title = "", subtitle = "", image = "", buttons = [] } = content;
 
   return (
     <section
@@ -53,7 +31,7 @@ export default function HeroV3({ content }: HeroV3Props) {
         <div className="absolute inset-0">
           <img
             src={image}
-            alt={title}
+            alt=""
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/50 to-black/30" />
@@ -65,14 +43,17 @@ export default function HeroV3({ content }: HeroV3Props) {
       {/* محتوا */}
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20 w-full">
         <div className="max-w-2xl ml-auto text-right space-y-6">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-            {renderTitle()}
-          </h1>
+          <RenderedContent
+            html={title}
+            as="h1"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+          />
 
           {subtitle && (
-            <p className="text-base lg:text-lg leading-8 text-white/80 max-w-xl mr-auto">
-              {subtitle}
-            </p>
+            <RenderedContent
+              html={subtitle}
+              className="text-base lg:text-lg leading-8 max-w-xl mr-auto"
+            />
           )}
 
           {buttons.length > 0 && (
@@ -97,13 +78,29 @@ export default function HeroV3({ content }: HeroV3Props) {
                   {btn.icon && (
                     <DynamicIcon name={btn.icon} className="size-4" />
                   )}
-                  <span>{btn.text}</span>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: String(btn.text || "").replace(/<[^>]*>/g, ""),
+                    }}
+                  />
                 </a>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* استایل برای متن سفید روی عکس */}
+      <style jsx>{`
+        h1,
+        h1 :global(*) {
+          color: #ffffff !important;
+        }
+        p,
+        p :global(*) {
+          color: rgba(255, 255, 255, 0.85) !important;
+        }
+      `}</style>
     </section>
   );
 }

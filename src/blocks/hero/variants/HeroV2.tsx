@@ -1,11 +1,11 @@
 "use client";
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface HeroV2Props {
   content: {
     title?: string;
-    title_highlight?: string;
     subtitle?: string;
     image?: string;
     background_color?: string;
@@ -21,28 +21,11 @@ interface HeroV2Props {
 export default function HeroV2({ content }: HeroV2Props) {
   const {
     title = "",
-    title_highlight = "",
     subtitle = "",
     image = "",
     background_color = "#F8FAFC",
     buttons = [],
   } = content;
-
-  const renderTitle = () => {
-    if (!title_highlight || !title.includes(title_highlight)) {
-      return title;
-    }
-    const parts = title.split(title_highlight);
-    return (
-      <>
-        {parts[0]}
-        <span style={{ color: "var(--site-primary)" }}>
-          {title_highlight}
-        </span>
-        {parts[1]}
-      </>
-    );
-  };
 
   return (
     <section
@@ -53,7 +36,7 @@ export default function HeroV2({ content }: HeroV2Props) {
         fontFamily: "var(--site-font)",
       }}
     >
-      {/* پس‌زمینه شبکه‌ای (grid dots) */}
+      {/* پس‌زمینه شبکه‌ای */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -69,20 +52,17 @@ export default function HeroV2({ content }: HeroV2Props) {
       <div className="relative max-w-5xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         {/* متن و دکمه‌ها - وسط */}
         <div className="text-center space-y-6 max-w-3xl mx-auto">
-          <h1
+          <RenderedContent
+            html={title}
+            as="h1"
             className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
-            style={{ color: "var(--site-text)" }}
-          >
-            {renderTitle()}
-          </h1>
+          />
 
           {subtitle && (
-            <p
-              className="text-base lg:text-lg leading-8"
-              style={{ color: "var(--site-text-muted)" }}
-            >
-              {subtitle}
-            </p>
+            <RenderedContent
+              html={subtitle}
+              className="text-base lg:text-lg leading-8 text-muted-foreground"
+            />
           )}
 
           {buttons.length > 0 && (
@@ -106,7 +86,11 @@ export default function HeroV2({ content }: HeroV2Props) {
                   {btn.icon && (
                     <DynamicIcon name={btn.icon} className="size-4" />
                   )}
-                  <span>{btn.text}</span>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: String(btn.text || "").replace(/<[^>]*>/g, ""),
+                    }}
+                  />
                 </a>
               ))}
             </div>
@@ -118,7 +102,7 @@ export default function HeroV2({ content }: HeroV2Props) {
           {image ? (
             <img
               src={image}
-              alt={title}
+              alt=""
               className="w-full max-w-3xl h-auto object-contain"
             />
           ) : (

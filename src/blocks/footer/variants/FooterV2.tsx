@@ -1,6 +1,7 @@
 "use client";
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface FooterV2Props {
   content: {
@@ -36,7 +37,10 @@ export default function FooterV2({ content }: FooterV2Props) {
           {/* چپ: اطلاعات تماس */}
           <div className="flex flex-col gap-4 text-right md:order-2">
             <h4 className="text-white text-base font-bold">سوالی دارید؟</h4>
-            <p className="text-white/40 text-sm leading-7">{about_text}</p>
+            <RenderedContent
+              html={about_text}
+              className="text-white/40 text-sm leading-7 [&_*]:!text-inherit"
+            />
           </div>
 
           {/* راست: تماس‌ها */}
@@ -52,12 +56,14 @@ export default function FooterV2({ content }: FooterV2Props) {
                     className="size-4 text-white"
                   />
                 </div>
-                <div className="text-white text-sm font-semibold">
-                  {contact.label}
-                </div>
-                <div className="text-white/40 text-xs" dir="ltr">
-                  {contact.value}
-                </div>
+                <RenderedContent
+                  html={contact.label || ""}
+                  className="text-white text-sm font-semibold [&_*]:!text-inherit"
+                />
+                <RenderedContent
+                  html={contact.value || ""}
+                  className="text-white/40 text-xs [&_*]:!text-inherit"
+                />
               </div>
             ))}
           </div>
@@ -68,7 +74,10 @@ export default function FooterV2({ content }: FooterV2Props) {
 
         {/* پایین: کپی‌رایت + شبکه‌ها */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-white/30 text-xs">{copyright}</div>
+          <RenderedContent
+            html={copyright}
+            className="text-white/30 text-xs [&_*]:!text-inherit"
+          />
 
           {socials.length > 0 && (
             <div className="flex gap-2">

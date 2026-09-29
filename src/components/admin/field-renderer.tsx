@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -15,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { ImageField } from "./image-field";
 import { IconPicker } from "./icon-picker";
 import { ColorPicker } from "./color-picker";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { RichTextEditorCompact } from "@/components/ui/rich-text-editor-compact";
 import type { BlockField } from "@/blocks/registry";
 import {
   Plus,
@@ -38,7 +39,7 @@ export function FieldRenderer({
   onChange,
   siteId,
 }: FieldRendererProps) {
-  // ═══════ text ═══════
+  // ═══════ text (ادیتور Compact) ═══════
   if (field.type === "text") {
     return (
       <div className="space-y-2">
@@ -46,16 +47,16 @@ export function FieldRenderer({
           {field.label}
           {field.required && <span className="text-destructive mr-1">*</span>}
         </Label>
-        <Input
+        <RichTextEditorCompact
           value={value || ""}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={field.placeholder}
+          onChange={onChange}
+          placeholder={field.placeholder || "اینجا بنویسید..."}
         />
       </div>
     );
   }
 
-  // ═══════ textarea ═══════
+  // ═══════ textarea (ادیتور Full) ═══════
   if (field.type === "textarea") {
     return (
       <div className="space-y-2">
@@ -63,17 +64,17 @@ export function FieldRenderer({
           {field.label}
           {field.required && <span className="text-destructive mr-1">*</span>}
         </Label>
-        <Textarea
+        <RichTextEditor
           value={value || ""}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={field.placeholder}
-          rows={4}
+          onChange={onChange}
+          placeholder={field.placeholder || "اینجا بنویسید..."}
+          minHeight={100}
         />
       </div>
     );
   }
 
-  // ═══════ richtext ═══════
+  // ═══════ richtext (ادیتور Full با ارتفاع بیشتر) ═══════
   if (field.type === "richtext") {
     return (
       <div className="space-y-2">
@@ -81,11 +82,11 @@ export function FieldRenderer({
           {field.label}
           {field.required && <span className="text-destructive mr-1">*</span>}
         </Label>
-        <Textarea
+        <RichTextEditor
           value={value || ""}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={field.placeholder}
-          rows={6}
+          onChange={onChange}
+          placeholder={field.placeholder || "اینجا بنویسید..."}
+          minHeight={150}
         />
       </div>
     );
@@ -215,8 +216,6 @@ export function FieldRenderer({
     );
   }
 
-  // ⚠️ اگه به اینجا رسید، یعنی نوع فیلد ناشناخته‌ست
-  console.error("❌ Unknown field type:", field);
   return (
     <div className="p-3 bg-destructive/10 text-destructive text-xs rounded-lg">
       نوع فیلد ناشناخته: {field.type}
@@ -291,6 +290,10 @@ function RepeaterField({
       <div className="space-y-2">
         {value.map((item, index) => {
           const isOpen = openItems.includes(index);
+          const title =
+            item.title || item.name || item.label || `آیتم ${index + 1}`;
+          const cleanTitle = String(title).replace(/<[^>]*>/g, "").trim();
+
           return (
             <div
               key={index}
@@ -309,8 +312,8 @@ function RepeaterField({
                   )}
                 </button>
                 <GripVertical className="size-4 text-muted-foreground" />
-                <div className="flex-1 text-sm font-medium text-foreground">
-                  {item.title || item.name || item.label || `آیتم ${index + 1}`}
+                <div className="flex-1 text-sm font-medium text-foreground truncate">
+                  {cleanTitle || `آیتم ${index + 1}`}
                 </div>
                 <div className="flex items-center gap-1">
                   <button

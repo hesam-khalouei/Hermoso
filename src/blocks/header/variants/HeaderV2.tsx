@@ -30,7 +30,6 @@ export default function HeaderV2({ content }: HeaderV2Props) {
       style={{ fontFamily: "var(--site-font)" }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* لوگو - سمت راست */}
         <Link href="/" className="flex items-center shrink-0">
           {logo ? (
             <img
@@ -51,7 +50,6 @@ export default function HeaderV2({ content }: HeaderV2Props) {
           )}
         </Link>
 
-        {/* منو - وسط */}
         <nav className="hidden md:flex items-center gap-8">
           {menu_items.map((item, index) => (
             <Link
@@ -64,7 +62,11 @@ export default function HeaderV2({ content }: HeaderV2Props) {
                   : "var(--site-text-muted)",
               }}
             >
-              {item.title}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: String(item.title || "").replace(/<[^>]*>/g, ""),
+                }}
+              />
               {item.is_active && (
                 <span
                   className="absolute bottom-0 right-0 left-0 h-0.5 rounded-full"
@@ -75,7 +77,6 @@ export default function HeaderV2({ content }: HeaderV2Props) {
           ))}
         </nav>
 
-        {/* دکمه CTA - سمت چپ */}
         <Link
           href={cta_link}
           className="hidden md:inline-flex items-center justify-center h-10 px-5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
@@ -87,10 +88,13 @@ export default function HeaderV2({ content }: HeaderV2Props) {
             border: "2px solid rgb(24, 24, 27)",
           }}
         >
-          {cta_text}
+          <span
+            dangerouslySetInnerHTML={{
+              __html: String(cta_text || "").replace(/<[^>]*>/g, ""),
+            }}
+          />
         </Link>
 
-        {/* دکمه موبایل */}
         <button
           type="button"
           className="md:hidden size-10 rounded-lg flex items-center justify-center"

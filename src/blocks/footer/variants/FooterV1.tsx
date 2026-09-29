@@ -1,6 +1,7 @@
 "use client";
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface FooterV1Props {
   content: {
@@ -9,7 +10,6 @@ interface FooterV1Props {
     copyright?: string;
     socials?: { icon: string; link: string }[];
     contacts?: { icon: string; label: string; value: string }[];
-    links?: { title: string; items?: { title: string; link: string }[] }[];
   };
 }
 
@@ -68,11 +68,12 @@ export default function FooterV1({ content }: FooterV1Props) {
               {contacts.length > 0 ? (
                 contacts.map((contact, i) => (
                   <div key={i} className="flex items-center gap-2 justify-end">
-                    <span className="text-white/40 text-sm" dir="ltr">
-                      {contact.value}
-                    </span>
+                    <RenderedContent
+                      html={contact.value || ""}
+                      className="text-white/40 text-sm [&_*]:!text-inherit"
+                    />
                     <div
-                      className="size-9 rounded-xl flex items-center justify-center"
+                      className="size-9 rounded-xl flex items-center justify-center shrink-0"
                       style={{ backgroundColor: "#27272A" }}
                     >
                       <DynamicIcon
@@ -106,7 +107,10 @@ export default function FooterV1({ content }: FooterV1Props) {
                 لوگو
               </div>
             )}
-            <p className="text-white/40 text-sm leading-7">{about_text}</p>
+            <RenderedContent
+              html={about_text}
+              className="text-white/40 text-sm leading-7 [&_*]:!text-inherit"
+            />
           </div>
         </div>
 
@@ -115,7 +119,10 @@ export default function FooterV1({ content }: FooterV1Props) {
 
         {/* کپی‌رایت */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-white/40 text-xs">{copyright}</div>
+          <RenderedContent
+            html={copyright}
+            className="text-white/40 text-xs [&_*]:!text-inherit"
+          />
           <div className="text-white/30 text-xs">
             ساخته‌شده با ❤️ در هرموسو
           </div>

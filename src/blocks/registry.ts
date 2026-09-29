@@ -113,14 +113,14 @@ export const BLOCKS: Record<string, BlockDefinition> = {
     fields: [
       {
         key: "title",
-        type: "text",
+        type: "textarea",
         label: "عنوان",
         required: true,
         placeholder: "آغاز طرح اعتبار پوشاک",
       },
       {
         key: "title_highlight",
-        type: "text",
+        type: "textarea",
         label: "کلمه رنگی در عنوان",
         placeholder: "اعتبار",
       },

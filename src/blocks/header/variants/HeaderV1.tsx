@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface HeaderV1Props {
   content: {
@@ -20,9 +21,7 @@ export default function HeaderV1({ content }: HeaderV1Props) {
     <header
       dir="rtl"
       className="w-full bg-[var(--site-bg)] border-b border-[var(--site-border)] sticky top-0 z-40"
-      style={{
-        fontFamily: "var(--site-font)",
-      }}
+      style={{ fontFamily: "var(--site-font)" }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* لوگو - سمت راست */}
@@ -59,7 +58,11 @@ export default function HeaderV1({ content }: HeaderV1Props) {
                   : "var(--site-text-muted)",
               }}
             >
-              {item.title}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: String(item.title || "").replace(/<[^>]*>/g, ""),
+                }}
+              />
               {item.is_active && (
                 <span
                   className="absolute bottom-0 right-0 left-0 h-0.5 rounded-full"
@@ -70,7 +73,6 @@ export default function HeaderV1({ content }: HeaderV1Props) {
           ))}
         </nav>
 
-        {/* فضای خالی سمت چپ (برای تعادل) */}
         <div className="w-24 hidden md:block" />
       </div>
     </header>

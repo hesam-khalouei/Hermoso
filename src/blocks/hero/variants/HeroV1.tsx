@@ -1,11 +1,11 @@
 "use client";
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
+import { RenderedContent } from "@/components/ui/rendered-content";
 
 interface HeroV1Props {
   content: {
     title?: string;
-    title_highlight?: string;
     subtitle?: string;
     image?: string;
     background_color?: string;
@@ -21,29 +21,11 @@ interface HeroV1Props {
 export default function HeroV1({ content }: HeroV1Props) {
   const {
     title = "",
-    title_highlight = "",
     subtitle = "",
     image = "",
     background_color = "#030712",
     buttons = [],
   } = content;
-
-  // جدا کردن کلمه رنگی از عنوان
-  const renderTitle = () => {
-    if (!title_highlight || !title.includes(title_highlight)) {
-      return title;
-    }
-    const parts = title.split(title_highlight);
-    return (
-      <>
-        {parts[0]}
-        <span style={{ color: "var(--site-primary)" }}>
-          {title_highlight}
-        </span>
-        {parts[1]}
-      </>
-    );
-  };
 
   return (
     <section
@@ -78,20 +60,17 @@ export default function HeroV1({ content }: HeroV1Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* متن - راست */}
           <div className="order-2 lg:order-1 text-right space-y-6">
-            <h1
-              className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.3]"
-              style={{ color: "#FFFFFF" }}
-            >
-              {renderTitle()}
-            </h1>
+            <RenderedContent
+              html={title}
+              as="h1"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.3] [&_*]:!text-inherit"
+            />
 
             {subtitle && (
-              <p
-                className="text-base lg:text-lg leading-8 max-w-xl mr-auto"
-                style={{ color: "rgba(255, 255, 255, 0.6)" }}
-              >
-                {subtitle}
-              </p>
+              <RenderedContent
+                html={subtitle}
+                className="text-base lg:text-lg leading-8 max-w-xl mr-auto [&_*]:!text-inherit"
+              />
             )}
 
             {buttons.length > 0 && (
@@ -113,8 +92,15 @@ export default function HeroV1({ content }: HeroV1Props) {
                       border: "2px solid rgb(24, 24, 27)",
                     }}
                   >
-                    {btn.icon && <DynamicIcon name={btn.icon} className="size-4" />}
-                    <span>{btn.text}</span>
+                    {btn.icon && (
+                      <DynamicIcon name={btn.icon} className="size-4" />
+                    )}
+                    {/* متن دکمه رو از HTML پاک کن */}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: String(btn.text || "").replace(/<[^>]*>/g, ""),
+                      }}
+                    />
                   </a>
                 ))}
               </div>
@@ -126,7 +112,7 @@ export default function HeroV1({ content }: HeroV1Props) {
             {image ? (
               <img
                 src={image}
-                alt={title}
+                alt=""
                 className="w-full max-w-lg h-auto object-contain"
               />
             ) : (
@@ -148,6 +134,18 @@ export default function HeroV1({ content }: HeroV1Props) {
           </div>
         </div>
       </div>
+
+      {/* استایل برای متن تیره Hero */}
+      <style jsx>{`
+        h1,
+        h1 :global(*) {
+          color: #ffffff !important;
+        }
+        p,
+        p :global(*) {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+      `}</style>
     </section>
   );
 }
