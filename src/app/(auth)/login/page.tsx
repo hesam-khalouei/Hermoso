@@ -42,7 +42,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
         {/* لوگو و عنوان */}
         <div className="text-center mb-8">
@@ -58,7 +58,7 @@ export default function LoginPage() {
         </div>
 
         {/* کارت فرم */}
-        <div className="bg-white rounded-2xl shadow-xl border p-8">
+        <div className="bg-card text-card-foreground rounded-2xl shadow-xl border p-8">
           <h2 className="text-xl font-bold mb-6 text-right">
             ورود به پنل
           </h2>
