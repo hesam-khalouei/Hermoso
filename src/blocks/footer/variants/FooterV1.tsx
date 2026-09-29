@@ -2,12 +2,15 @@
 
 import { DynamicIcon } from "@/components/admin/icon-picker";
 import { RenderedContent } from "@/components/ui/rendered-content";
+import { sizeToCss } from "@/components/admin/size-field";
 
 interface FooterV1Props {
   content: {
     logo?: string;
+    logo_size?: any;
     about_text?: string;
     copyright?: string;
+    social_size?: any;
     socials?: { icon: string; link: string }[];
     contacts?: { icon: string; label: string; value: string }[];
   };
@@ -16,11 +19,16 @@ interface FooterV1Props {
 export default function FooterV1({ content }: FooterV1Props) {
   const {
     logo = "",
+    logo_size,
     about_text = "",
     copyright = "",
+    social_size,
     socials = [],
     contacts = [],
   } = content;
+
+  const logoSz = sizeToCss(logo_size, "48px");
+  const socialSz = sizeToCss(social_size, "40px");
 
   return (
     <footer
@@ -44,8 +52,12 @@ export default function FooterV1({ content }: FooterV1Props) {
                     href={social.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="size-10 rounded-xl flex items-center justify-center transition-opacity hover:opacity-80"
-                    style={{ backgroundColor: "#27272A" }}
+                    className="rounded-xl flex items-center justify-center transition-opacity hover:opacity-80"
+                    style={{
+                      backgroundColor: "#27272A",
+                      width: socialSz,
+                      height: socialSz,
+                    }}
                   >
                     <DynamicIcon
                       name={social.icon}
@@ -97,12 +109,17 @@ export default function FooterV1({ content }: FooterV1Props) {
               <img
                 src={logo}
                 alt="لوگو"
-                className="h-12 object-contain mr-auto"
+                className="w-auto object-contain mr-auto"
+                style={{ height: logoSz }}
               />
             ) : (
               <div
-                className="h-10 w-24 rounded-lg flex items-center justify-center text-white text-sm font-bold mr-auto"
-                style={{ backgroundColor: "var(--site-primary)" }}
+                className="rounded-lg flex items-center justify-center text-white text-sm font-bold mr-auto"
+                style={{
+                  backgroundColor: "var(--site-primary)",
+                  height: logoSz,
+                  width: `calc(${logoSz} * 2.4)`,
+                }}
               >
                 لوگو
               </div>
@@ -114,10 +131,8 @@ export default function FooterV1({ content }: FooterV1Props) {
           </div>
         </div>
 
-        {/* خط جداکننده */}
         <div className="my-8 h-px bg-white/10" />
 
-        {/* کپی‌رایت */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <RenderedContent
             html={copyright}

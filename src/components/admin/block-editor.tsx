@@ -1,7 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import { BLOCK_LIST } from "@/blocks/registry";
 import { BlockRenderer } from "@/blocks/BlockRenderer";
@@ -13,8 +29,6 @@ import {
   Eye,
   EyeOff,
   Trash2,
-  ChevronDown,
-  ChevronUp,
   Settings2,
 } from "lucide-react";
 
@@ -42,11 +56,44 @@ export function BlockEditor({
   theme,
   initialBlocks,
 }: BlockEditorProps) {
-  const router = useRouter();
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
   const [showAddPanel, setShowAddPanel] = useState(false);
   const [editingBlock, setEditingBlock] = useState<Block | null>(null);
 
+  // sensors برای drag & drop
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // ═══════ Drag End ═══════
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = blocks.findIndex((b) => b.id === active.id);
+    const newIndex = blocks.findIndex((b) => b.id === over.id);
+
+    const newBlocks = arrayMove(blocks, oldIndex, newIndex);
+    newBlocks.forEach((b, i) => (b.orderIndex = i));
+    setBlocks(newBlocks);
+
+    await fetch(`/api/pages/${pageId}/blocks/reorder`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order: newBlocks.map((b) => ({ id: b.id, orderIndex: b.orderIndex })),
+      }),
+    });
+  }
+
+  // ═══════ افزودن بلاک ═══════
   async function addBlock(blockCode: string) {
     const definition = BLOCK_LIST.find((b) => b.code === blockCode);
     if (!definition) return;
@@ -78,6 +125,7 @@ export function BlockEditor({
     }
   }
 
+  // ═══════ حذف بلاک ═══════
   async function deleteBlock(id: string) {
     if (!confirm("این بلاک حذف شود؟")) return;
 
@@ -93,31 +141,7 @@ export function BlockEditor({
     }
   }
 
-  async function moveBlock(id: string, direction: "up" | "down") {
-    const index = blocks.findIndex((b) => b.id === id);
-    if (index === -1) return;
-
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    if (newIndex < 0 || newIndex >= blocks.length) return;
-
-    const newBlocks = [...blocks];
-    [newBlocks[index], newBlocks[newIndex]] = [
-      newBlocks[newIndex],
-      newBlocks[index],
-    ];
-
-    newBlocks.forEach((b, i) => (b.orderIndex = i));
-    setBlocks(newBlocks);
-
-    await fetch(`/api/pages/${pageId}/blocks/reorder`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order: newBlocks.map((b) => ({ id: b.id, orderIndex: b.orderIndex })),
-      }),
-    });
-  }
-
+  // ═══════ مخفی/نمایان ═══════
   async function toggleVisible(id: string) {
     const block = blocks.find((b) => b.id === id);
     if (!block) return;
@@ -134,6 +158,7 @@ export function BlockEditor({
     });
   }
 
+  // ═══════ ذخیره تغییرات از دیالوگ ═══════
   function handleBlockSave(updated: Block) {
     setBlocks(blocks.map((b) => (b.id === updated.id ? updated : b)));
   }
@@ -141,7 +166,7 @@ export function BlockEditor({
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6">
-        {/* ستون راست: لیست بلاک‌ها */}
+        {/* ═══ ستون راست: لیست بلاک‌ها ═══ */}
         <div className="space-y-3">
           <div className="bg-card rounded-2xl border">
             <div className="p-4 border-b">
@@ -161,76 +186,28 @@ export function BlockEditor({
                   روی «افزودن بلاک» بزن
                 </div>
               ) : (
-                blocks.map((block, index) => {
-                  const def = BLOCK_LIST.find(
-                    (b) => b.code === block.blockType
-                  );
-                  return (
-                    <div
-                      key={block.id}
-                      className={`p-3 rounded-xl border-2 transition ${
-                        block.isVisible
-                          ? "border-border bg-card"
-                          : "border-dashed border-muted-foreground/30 bg-muted/30 opacity-60"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <GripVertical className="size-4 text-muted-foreground shrink-0" />
-                        <button
-                          onClick={() => setEditingBlock(block)}
-                          className="flex-1 min-w-0 text-right hover:opacity-80"
-                        >
-                          <div className="font-medium text-sm truncate">
-                            {def?.label || block.blockType}
-                          </div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            طرح: {block.variant}
-                          </div>
-                        </button>
-
-                        <div className="flex items-center gap-1 shrink-0">
-                          <button
-                            onClick={() => setEditingBlock(block)}
-                            className="size-7 rounded flex items-center justify-center hover:bg-primary/10 text-primary"
-                            title="ویرایش محتوا"
-                          >
-                            <Settings2 className="size-3.5" />
-                          </button>
-                          <button
-                            onClick={() => moveBlock(block.id, "up")}
-                            disabled={index === 0}
-                            className="size-7 rounded flex items-center justify-center hover:bg-secondary disabled:opacity-30"
-                          >
-                            <ChevronUp className="size-3.5" />
-                          </button>
-                          <button
-                            onClick={() => moveBlock(block.id, "down")}
-                            disabled={index === blocks.length - 1}
-                            className="size-7 rounded flex items-center justify-center hover:bg-secondary disabled:opacity-30"
-                          >
-                            <ChevronDown className="size-3.5" />
-                          </button>
-                          <button
-                            onClick={() => toggleVisible(block.id)}
-                            className="size-7 rounded flex items-center justify-center hover:bg-secondary"
-                          >
-                            {block.isVisible ? (
-                              <Eye className="size-3.5" />
-                            ) : (
-                              <EyeOff className="size-3.5" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => deleteBlock(block.id)}
-                            className="size-7 rounded flex items-center justify-center hover:bg-destructive/10 text-destructive"
-                          >
-                            <Trash2 className="size-3.5" />
-                          </button>
-                        </div>
-                      </div>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={blocks.map((b) => b.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-2">
+                      {blocks.map((block) => (
+                        <SortableBlockItem
+                          key={block.id}
+                          block={block}
+                          onEdit={() => setEditingBlock(block)}
+                          onToggleVisible={() => toggleVisible(block.id)}
+                          onDelete={() => deleteBlock(block.id)}
+                        />
+                      ))}
                     </div>
-                  );
-                })
+                  </SortableContext>
+                </DndContext>
               )}
             </div>
 
@@ -270,7 +247,7 @@ export function BlockEditor({
           )}
         </div>
 
-        {/* ستون چپ: پیش‌نمایش */}
+        {/* ═══ ستون چپ: پیش‌نمایش ═══ */}
         <div className="space-y-3">
           <div className="bg-card rounded-2xl border p-3">
             <div className="flex items-center gap-2 mb-3">
@@ -333,5 +310,108 @@ export function BlockEditor({
         siteId={siteId}
       />
     </>
+  );
+}
+
+// ═══════════════════════════════════════
+// آیتم قابل درگ
+// ═══════════════════════════════════════
+interface SortableBlockItemProps {
+  block: Block;
+  onEdit: () => void;
+  onToggleVisible: () => void;
+  onDelete: () => void;
+}
+
+function SortableBlockItem({
+  block,
+  onEdit,
+  onToggleVisible,
+  onDelete,
+}: SortableBlockItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: block.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,
+    zIndex: isDragging ? 100 : "auto",
+  };
+
+  const def = BLOCK_LIST.find((b) => b.code === block.blockType);
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      dir="rtl"
+      className={`p-3 rounded-xl border-2 transition ${
+        block.isVisible
+          ? "border-border bg-card"
+          : "border-dashed border-muted-foreground/30 bg-muted/30 opacity-60"
+      } ${isDragging ? "shadow-2xl ring-2 ring-primary" : ""}`}
+    >
+      <div className="flex items-center gap-2">
+        {/* آیکن درگ - راست */}
+        <button
+          type="button"
+          {...listeners}
+          {...attributes}
+          className="size-6 rounded flex items-center justify-center hover:bg-secondary cursor-grab active:cursor-grabbing touch-none shrink-0"
+          title="برای جابجایی بکشید"
+        >
+          <GripVertical className="size-4 text-muted-foreground" />
+        </button>
+
+        {/* عنوان */}
+        <button
+          onClick={onEdit}
+          className="flex-1 min-w-0 text-right hover:opacity-80"
+        >
+          <div className="font-medium text-sm truncate">
+            {def?.label || block.blockType}
+          </div>
+          <div className="text-xs text-muted-foreground truncate">
+            طرح: {block.variant}
+          </div>
+        </button>
+
+        {/* دکمه‌های عملیات - چپ */}
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={onEdit}
+            className="size-7 rounded flex items-center justify-center hover:bg-primary/10 text-primary"
+            title="ویرایش محتوا"
+          >
+            <Settings2 className="size-3.5" />
+          </button>
+          <button
+            onClick={onToggleVisible}
+            className="size-7 rounded flex items-center justify-center hover:bg-secondary"
+            title={block.isVisible ? "مخفی کن" : "نمایش بده"}
+          >
+            {block.isVisible ? (
+              <Eye className="size-3.5" />
+            ) : (
+              <EyeOff className="size-3.5" />
+            )}
+          </button>
+          <button
+            onClick={onDelete}
+            className="size-7 rounded flex items-center justify-center hover:bg-destructive/10 text-destructive"
+            title="حذف"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
