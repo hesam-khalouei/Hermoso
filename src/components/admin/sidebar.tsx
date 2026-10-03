@@ -70,7 +70,7 @@ export function Sidebar() {
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="size-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20 p-1.5">
             <img
-              src="/public/logo/Hermoso - white.svg"
+              src="/public/logo/Hermoso - white.png"
               alt="هرموسو"
               className="size-10 rounded-xl object-contain"
             />

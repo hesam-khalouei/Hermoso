@@ -48,7 +48,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-primary text-primary-foreground mb-4 shadow-lg">
             <img
-              src="/public/logo/Hermoso - white.svg"
+              src="/public/logo/Hermoso - white.png"
               alt="هرموسو"
               className="size-16 rounded-xl object-contain"
             />
