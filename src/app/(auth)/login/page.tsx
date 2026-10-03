@@ -46,12 +46,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* لوگو و عنوان */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-primary-foreground mb-4 shadow-lg">
-            <span className="text-3xl font-bold">ه</span>
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-primary text-primary-foreground mb-4 shadow-lg">
+            <img
+              src="./Hermoso - white.svg"
+              alt="هرموسو"
+              className="size-16 rounded-xl object-contain"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            هرموسو
-          </h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">HERMOSO</h1>
           <p className="text-muted-foreground text-sm">
             پنل مدیریت محتوای فارسی
           </p>
@@ -59,9 +61,7 @@ export default function LoginPage() {
 
         {/* کارت فرم */}
         <div className="bg-card text-card-foreground rounded-2xl shadow-xl border p-8">
-          <h2 className="text-xl font-bold mb-6 text-right">
-            ورود به پنل
-          </h2>
+          <h2 className="text-xl font-bold mb-6 text-right">ورود به پنل</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
@@ -98,18 +98,14 @@ export default function LoginPage() {
               </div>
             )}
 
-            <Button
-              type="submit"
-              className="w-full h-11"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full h-11" disabled={loading}>
               {loading ? "در حال ورود..." : "ورود"}
             </Button>
           </form>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          © ۱۴۰۳ هرموسو — همه حقوق محفوظ است
+          © ۱۴۰5 هرموسو — همه حقوق محفوظ است
         </p>
       </div>
     </div>

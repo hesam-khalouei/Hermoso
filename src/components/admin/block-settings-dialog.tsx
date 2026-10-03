@@ -10,10 +10,17 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FieldRenderer } from "./field-renderer";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { FieldRenderer } from "@/components/admin/field-renderer";
 import { getBlock } from "@/blocks/registry";
-import { cn } from "@/lib/utils";
-import { Save, Check } from "lucide-react";
+import { Save, Layout, Check } from "lucide-react";
 
 interface Block {
   id: string;
@@ -57,6 +64,8 @@ export function BlockSettingsDialog({
   const definition = getBlock(block.blockType);
   if (!definition) return null;
 
+  const selectedVariant = definition.variants.find((v) => v.code === variant);
+
   async function handleSave() {
     setSaving(true);
     const res = await fetch(`/api/pages/${pageId}/blocks/${block!.id}`, {
@@ -87,50 +96,15 @@ export function BlockSettingsDialog({
         </DialogHeader>
 
         <Tabs
-          defaultValue="variant"
+          defaultValue="content"
           className="flex-1 overflow-hidden flex flex-col"
         >
           <TabsList className="self-start">
-            <TabsTrigger value="variant">طرح نمایش</TabsTrigger>
             <TabsTrigger value="content">محتوا</TabsTrigger>
+            <TabsTrigger value="variant">طرح نمایش</TabsTrigger>
           </TabsList>
 
-          <TabsContent
-            value="variant"
-            className="flex-1 overflow-y-auto mt-4 pr-1"
-          >
-            <div className="grid grid-cols-2 gap-3">
-              {definition.variants.map((v) => (
-                <button
-                  key={v.code}
-                  type="button"
-                  onClick={() => setVariant(v.code)}
-                  className={cn(
-                    "relative p-4 rounded-xl border-2 text-right transition-all bg-card",
-                    variant === v.code
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-muted-foreground/50"
-                  )}
-                >
-                  {variant === v.code && (
-                    <div className="absolute top-2 left-2 size-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check className="size-3 text-primary-foreground" />
-                    </div>
-                  )}
-                  <div className="font-medium mb-1">{v.label}</div>
-                  {v.description && (
-                    <div className="text-xs text-muted-foreground">
-                      {v.description}
-                    </div>
-                  )}
-                  <div className="mt-2 text-[10px] text-muted-foreground font-mono">
-                    {v.code}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </TabsContent>
-
+          {/* ═══ تب محتوا ═══ */}
           <TabsContent
             value="content"
             className="flex-1 overflow-y-auto mt-4 pr-1 space-y-4"
@@ -146,6 +120,79 @@ export function BlockSettingsDialog({
                 siteId={siteId}
               />
             ))}
+          </TabsContent>
+
+          {/* ═══ تب طرح نمایش — به صورت Dropdown ═══ */}
+          <TabsContent
+            value="variant"
+            className="flex-1 overflow-y-auto mt-4 pr-1"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 justify-end">
+                <Label className="font-semibold">انتخاب طرح نمایش</Label>
+                <Layout className="size-4 text-primary" />
+              </div>
+
+              {/* Dropdown واریانت‌ها */}
+              <Select value={variant} onValueChange={setVariant}>
+                <SelectTrigger className="h-12 text-right">
+                  <SelectValue placeholder="یه طرح انتخاب کنید" />
+                </SelectTrigger>
+                <SelectContent>
+                  {definition.variants.map((v) => (
+                    <SelectItem key={v.code} value={v.code}>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{v.label}</span>
+                        <span className="text-[10px] text-muted-foreground font-mono">
+                          {v.code}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* توضیحات واریانت انتخاب‌شده */}
+              {selectedVariant?.description && (
+                <div className="p-4 rounded-xl bg-secondary/40 border border-border">
+                  <div className="text-xs text-muted-foreground mb-1">
+                    درباره این طرح:
+                  </div>
+                  <div className="text-sm">{selectedVariant.description}</div>
+                </div>
+              )}
+
+              {/* پیش‌نمایش کوچیک همه واریانت‌ها */}
+              <div className="space-y-2">
+                <div className="text-xs text-muted-foreground text-right">
+                  همه طرح‌های موجود:
+                </div>
+                <div className="space-y-1">
+                  {definition.variants.map((v) => (
+                    <button
+                      key={v.code}
+                      type="button"
+                      onClick={() => setVariant(v.code)}
+                      className={`w-full text-right p-3 rounded-lg border transition flex items-center justify-between gap-2 ${
+                        variant === v.code
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-muted-foreground/50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">{v.label}</span>
+                        <span className="text-[10px] text-muted-foreground font-mono">
+                          {v.code}
+                        </span>
+                      </div>
+                      {variant === v.code && (
+                        <Check className="size-4 text-primary shrink-0" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
 

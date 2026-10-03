@@ -68,11 +68,15 @@ export function Sidebar() {
       {/* لوگو */}
       <div className="p-6 border-b">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="size-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20">
-            <span className="text-xl font-bold">ه</span>
+          <div className="size-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20 p-1.5">
+            <img
+              src="/Hermoso - white.svg"
+              alt="هرموسو"
+              className="size-10 rounded-xl object-contain"
+            />
           </div>
           <div>
-            <div className="font-bold text-base leading-tight">هرموسو</div>
+            <div className="font-bold text-base leading-tight">HERMOSO</div>
             <div className="text-[11px] text-muted-foreground">
               پنل مدیریت محتوا
             </div>
@@ -98,7 +102,7 @@ export function Sidebar() {
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  : "text-muted-foreground hover:bg-secondary hover:text-foreground",
               )}
             >
               <Icon className="size-[18px] shrink-0" />
@@ -123,7 +127,7 @@ export function Sidebar() {
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  : "text-muted-foreground hover:bg-secondary hover:text-foreground",
               )}
             >
               <Icon className="size-[18px] shrink-0" />

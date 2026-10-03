@@ -2,6 +2,7 @@ import { getBlock } from "./registry";
 import HeaderRenderer from "./header/renderer";
 import HeroRenderer from "./hero/renderer";
 import IntroRenderer from "./intro/renderer";
+import TimelineRenderer from "./timeline/renderer";
 import AboutRenderer from "./about/renderer";
 import FeaturesRenderer from "./features/renderer";
 import CtaRenderer from "./cta/renderer";
@@ -24,6 +25,7 @@ const blockComponents: Record<
   header: HeaderRenderer,
   hero: HeroRenderer,
   intro: IntroRenderer,
+  timeline: TimelineRenderer,
   about: AboutRenderer,
   features: FeaturesRenderer,
   cta: CtaRenderer,
